@@ -32,7 +32,17 @@ export class PDFProcessor {
             const pdfDoc = await PDFLib.PDFDocument.load(buffer);
             
             // Load with PDF.js for rendering
-            const loadingTask = pdfjsLib.getDocument(buffer);
+            const uint8Array = new Uint8Array(buffer);
+            const loadingTask = pdfjsLib.getDocument({
+                data: uint8Array,
+                cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/cmaps/',
+                cMapPacked: true,
+                standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/standard_fonts/',
+                disableStream: false,
+                disableAutoFetch: false,
+                verbosity: 0
+            });
+            
             const pdfViewer = await loadingTask.promise;
             
             return {
@@ -43,7 +53,24 @@ export class PDFProcessor {
             };
         } catch (error) {
             console.error('PDF loading error:', error);
-            throw new Error('PDF 文件损坏或格式不支持');
+            
+            // 提供更详细的错误信息
+            let errorMessage = 'PDF 处理失败';
+            if (error.message.includes('Invalid PDF')) {
+                errorMessage = 'PDF 文件格式无效，请确保文件没有损坏';
+            } else if (error.message.includes('password')) {
+                errorMessage = '不支持加密的 PDF 文件';
+            } else if (error.message.includes('compressed')) {
+                errorMessage = '不支持此 PDF 压缩格式';
+            } else if (error.name === 'InvalidPDFException') {
+                errorMessage = 'PDF 文件损坏或不是有效的 PDF 格式';
+            } else if (error.name === 'MissingPDFException') {
+                errorMessage = '文件不是 PDF 格式';
+            } else if (error.name === 'UnexpectedResponseException') {
+                errorMessage = '网络错误，请重试';
+            }
+            
+            throw new Error(errorMessage);
         }
     }
 

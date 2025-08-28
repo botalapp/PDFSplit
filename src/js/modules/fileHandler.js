@@ -23,19 +23,19 @@ export class FileHandler {
             };
         }
 
-        // Check file type
-        if (!this.allowedTypes.includes(file.type)) {
-            return {
-                isValid: false,
-                error: '请上传 PDF 文件'
-            };
-        }
-
-        // Check file extension
+        // Check file extension first (more reliable than MIME type)
         if (!file.name.toLowerCase().endsWith('.pdf')) {
             return {
                 isValid: false,
-                error: '文件扩展名必须是 .pdf'
+                error: '请上传 PDF 文件（.pdf 格式）'
+            };
+        }
+
+        // Check file type (some browsers may not set correct MIME type)
+        if (file.type && !this.allowedTypes.includes(file.type) && file.type !== '') {
+            return {
+                isValid: false,
+                error: '文件类型不正确，请上传 PDF 文件'
             };
         }
 
@@ -56,6 +56,14 @@ export class FileHandler {
             };
         }
 
+        // Check minimum file size (PDF files are usually at least 1KB)
+        if (file.size < 1024) {
+            return {
+                isValid: false,
+                error: '文件过小，可能不是有效的 PDF 文件'
+            };
+        }
+
         return {
             isValid: true,
             error: null
@@ -71,8 +79,17 @@ export class FileHandler {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             
-            reader.onload = (e) => {
-                resolve(e.target.result);
+            reader.onload = async (e) => {
+                const arrayBuffer = e.target.result;
+                
+                // Validate PDF file header
+                const isValidPDF = this.validatePDFHeader(arrayBuffer);
+                if (!isValidPDF) {
+                    reject(new Error('不是有效的 PDF 文件格式'));
+                    return;
+                }
+                
+                resolve(arrayBuffer);
             };
             
             reader.onerror = (e) => {
@@ -81,6 +98,25 @@ export class FileHandler {
             
             reader.readAsArrayBuffer(file);
         });
+    }
+
+    /**
+     * Validate PDF file header
+     * @param {ArrayBuffer} buffer - File buffer
+     * @returns {boolean} Whether file has valid PDF header
+     */
+    validatePDFHeader(buffer) {
+        if (!buffer || buffer.byteLength < 5) {
+            return false;
+        }
+        
+        const uint8Array = new Uint8Array(buffer, 0, 5);
+        const header = Array.from(uint8Array)
+            .map(byte => String.fromCharCode(byte))
+            .join('');
+        
+        // PDF files start with %PDF-
+        return header === '%PDF-';
     }
 
     /**

@@ -161,8 +161,19 @@
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
     <script>
-        // Set up PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+        // Set up PDF.js worker and configuration
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+            
+            // Configure PDF.js
+            pdfjsLib.GlobalWorkerOptions.cMapUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/cmaps/';
+            pdfjsLib.GlobalWorkerOptions.cMapPacked = true;
+            pdfjsLib.GlobalWorkerOptions.standardFontDataUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/standard_fonts/';
+            
+            console.log('PDF.js initialized successfully');
+        } else {
+            console.error('PDF.js failed to load');
+        }
     </script>
     <script src="src/js/main.js" type="module"></script>
 </body>
