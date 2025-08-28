@@ -160,18 +160,17 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     
-    <!-- 优化PDF.js加载，添加错误处理和回退机制 -->
-    <script async onload="pdfJsLoaded()" onerror="pdfJsLoadError()" src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+    <!-- PDF.js 加载 -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
     
     <script>
         // 全局标志，标记PDF.js是否加载成功
         window.pdfJsAvailable = false;
         
-        function pdfJsLoaded() {
-            window.pdfJsAvailable = true;
-            
-            // Set up PDF.js worker and configuration
-            if (typeof pdfjsLib !== 'undefined') {
+        // 立即检查PDF.js是否加载
+        if (typeof pdfjsLib !== 'undefined') {
+            try {
+                // Set up PDF.js worker and configuration
                 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
                 
                 // Configure PDF.js
@@ -179,31 +178,19 @@
                 pdfjsLib.GlobalWorkerOptions.cMapPacked = true;
                 pdfjsLib.GlobalWorkerOptions.standardFontDataUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/standard_fonts/';
                 
+                window.pdfJsAvailable = true;
                 console.log('PDF.js initialized successfully');
+            } catch (error) {
+                console.error('PDF.js initialization error:', error);
+                window.pdfJsAvailable = false;
             }
-            
-            // 加载主脚本
-            loadMainScript();
-        }
-        
-        function pdfJsLoadError() {
-            console.warn('PDF.js failed to load, will use simplified version');
+        } else {
+            console.warn('PDF.js not available, will use simplified version');
             window.pdfJsAvailable = false;
-            // 即使PDF.js加载失败，也加载主脚本
-            loadMainScript();
-        }
-        
-        function loadMainScript() {
-            const script = document.createElement('script');
-            script.src = 'src/js/main.js';
-            script.type = 'module';
-            document.body.appendChild(script);
-        }
-        
-        // 如果PDF.js在这个脚本执行前已经加载完成（缓存）
-        if (typeof pdfjsLib !== 'undefined') {
-            pdfJsLoaded();
         }
     </script>
+    
+    <!-- 直接加载主脚本 -->
+    <script src="src/js/main.js" type="module"></script>
 </body>
 </html>
