@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="免费在线 PDF 分割工具，支持按页数、页面范围分割，客户端处理保护隐私">
-    <meta name="keywords" content="PDF分割,PDF拆分,在线工具,客户端处理">
-    <title>PDFSplit - 免费在线 PDF 分割工具</title>
+    <meta name="description" content="Free online PDF splitter tool that supports splitting by page count, page ranges. All processing is done locally to protect your privacy.">
+    <meta name="keywords" content="PDF split,PDF splitter,online tool,client-side processing">
+    <title>PDFSplit - Free Online PDF Splitter</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="src/assets/favicon.svg">
@@ -33,7 +33,7 @@
                     </svg>
                     <h1>PDFSplit</h1>
                 </div>
-                <p class="tagline">免费在线 PDF 分割工具</p>
+                <p class="tagline">Free Online PDF Splitter</p>
             </div>
         </div>
     </header>
@@ -52,9 +52,9 @@
                         </svg>
                     </div>
                     <div class="upload-content">
-                        <h2>上传 PDF 文件</h2>
-                        <p>拖拽文件到此处或点击选择文件</p>
-                        <p class="upload-note">支持最大 50MB 的 PDF 文件，客户端处理保护隐私</p>
+                        <h2>Upload PDF File</h2>
+                        <p>Drag and drop files here or click to select files</p>
+                        <p class="upload-note">Supports PDF files up to 50MB. All processing is done locally to protect your privacy</p>
                     </div>
                     <input type="file" id="fileInput" accept=".pdf" hidden>
                 </div>
@@ -64,7 +64,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
-                    <div class="progress-text" id="progressText">处理中...</div>
+                    <div class="progress-text" id="progressText">Processing...</div>
                 </div>
 
                 <!-- Error Message -->
@@ -74,36 +74,36 @@
             <!-- PDF Preview Section -->
             <section class="preview-section" id="previewSection" style="display: none;">
                 <div class="preview-header">
-                    <h2>PDF 预览</h2>
+                    <h2>PDF Preview</h2>
                     <div class="file-info" id="fileInfo"></div>
                 </div>
 
                 <div class="preview-content">
                     <!-- Split Options -->
                     <div class="split-options">
-                        <h3>分割选项</h3>
+                        <h3>Split Options</h3>
                         <div class="option-group">
                             <div class="radio-option">
                                 <input type="radio" id="splitByPages" name="splitMode" value="pages" checked>
-                                <label for="splitByPages">按页数分割</label>
+                                <label for="splitByPages">Split by Page Count</label>
                                 <div class="option-details" id="splitByPagesDetails">
-                                    <input type="number" id="pagesPerFile" min="1" value="1" placeholder="每个文件页数">
+                                    <input type="number" id="pagesPerFile" min="1" value="1" placeholder="Pages per file">
                                 </div>
                             </div>
                             
                             <div class="radio-option">
                                 <input type="radio" id="splitByRange" name="splitMode" value="range">
-                                <label for="splitByRange">按页面范围分割</label>
+                                <label for="splitByRange">Split by Page Ranges</label>
                                 <div class="option-details" id="splitByRangeDetails" style="display: none;">
-                                    <input type="text" id="pageRanges" placeholder="例如: 1-3, 5-10, 12">
+                                    <input type="text" id="pageRanges" placeholder="Example: 1-3, 5-10, 12">
                                 </div>
                             </div>
                             
                             <div class="radio-option">
                                 <input type="radio" id="extractPages" name="splitMode" value="extract">
-                                <label for="extractPages">提取特定页面</label>
+                                <label for="extractPages">Extract Specific Pages</label>
                                 <div class="option-details" id="extractPagesDetails" style="display: none;">
-                                    <input type="text" id="specificPages" placeholder="例如: 1, 3, 5, 8">
+                                    <input type="text" id="specificPages" placeholder="Example: 1, 3, 5, 8">
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
 
                     <!-- PDF Thumbnails -->
                     <div class="thumbnails-container">
-                        <h3>页面预览</h3>
+                        <h3>Page Preview</h3>
                         <div class="thumbnails-grid" id="thumbnailsGrid">
                             <!-- Thumbnails will be generated here -->
                         </div>
@@ -120,16 +120,16 @@
 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <button class="btn btn-secondary" id="resetBtn">重新上传</button>
-                    <button class="btn btn-primary" id="splitBtn">开始分割</button>
+                    <button class="btn btn-secondary" id="resetBtn">Reupload</button>
+                    <button class="btn btn-primary" id="splitBtn">Split PDF</button>
                 </div>
             </section>
 
             <!-- Results Section -->
             <section class="results-section" id="resultsSection" style="display: none;">
                 <div class="results-header">
-                    <h2>分割完成</h2>
-                    <p>您的 PDF 已成功分割为以下文件：</p>
+                    <h2>Split Complete</h2>
+                    <p>Your PDF has been successfully split into the following files:</p>
                 </div>
                 
                 <div class="download-list" id="downloadList">
@@ -137,8 +137,8 @@
                 </div>
 
                 <div class="action-buttons">
-                    <button class="btn btn-secondary" id="newFileBtn">处理新文件</button>
-                    <button class="btn btn-primary" id="downloadAllBtn">下载全部</button>
+                    <button class="btn btn-secondary" id="newFileBtn">Process New File</button>
+                    <button class="btn btn-primary" id="downloadAllBtn">Download All</button>
                 </div>
             </section>
         </div>
@@ -147,14 +147,14 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 PDFSplit. 所有文件在本地处理，保护您的隐私安全。</p>
+            <p>&copy; 2024 PDFSplit. All files are processed locally to protect your privacy.</p>
         </div>
     </footer>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay" style="display: none;">
         <div class="loading-spinner"></div>
-        <p>正在处理 PDF...</p>
+        <p>Processing PDF...</p>
     </div>
 
     <!-- Scripts -->

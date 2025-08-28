@@ -207,7 +207,7 @@ class PDFSplitApp {
                 console.error(`Error generating thumbnail for page ${i}:`, error);
                 // Create fallback thumbnail
                 const fallbackDiv = document.createElement('div');
-                fallbackDiv.textContent = `第 ${i} 页`;
+                fallbackDiv.textContent = `Page ${i}`;
                 fallbackDiv.style.cssText = `
                     width: 120px; height: 150px; border: 2px solid #ccc;
                     display: flex; align-items: center; justify-content: center;
@@ -240,13 +240,13 @@ class PDFSplitApp {
                 // Simple text-based thumbnail
                 item.innerHTML = `
                     <div class="thumbnail-simple">${thumbnail.canvas.innerHTML || thumbnail.canvas.textContent}</div>
-                    <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
+                    <div class="thumbnail-label">Page ${thumbnail.pageNumber}</div>
                 `;
             } else {
                 // Canvas-based thumbnail
                 item.innerHTML = `
                     <canvas class="thumbnail-canvas"></canvas>
-                    <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
+                    <div class="thumbnail-label">Page ${thumbnail.pageNumber}</div>
                 `;
                 
                 try {
@@ -259,8 +259,8 @@ class PDFSplitApp {
                     console.warn('Failed to draw canvas thumbnail:', error);
                     // Fallback to simple thumbnail
                     item.innerHTML = `
-                        <div class="thumbnail-simple">第 ${thumbnail.pageNumber} 页</div>
-                        <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
+                        <div class="thumbnail-simple">Page ${thumbnail.pageNumber}</div>
+                        <div class="thumbnail-label">Page ${thumbnail.pageNumber}</div>
                     `;
                 }
             }

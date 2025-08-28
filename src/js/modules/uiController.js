@@ -22,7 +22,7 @@ export class UIController {
      * @param {number} progress - Progress percentage (0-100)
      * @param {string} message - Progress message
      */
-    showProgress(progress = 0, message = '处理中...') {
+    showProgress(progress = 0, message = 'Processing...') {
         this.elements.progressContainer.style.display = 'block';
         this.updateProgress(progress, message);
         this.hideError();
