@@ -14,12 +14,20 @@ class PDFSplitApp {
     constructor() {
         this.fileHandler = new FileHandler();
         
-        // Try to use full PDF processor, fallback to simple version
-        try {
-            this.pdfProcessor = new PDFProcessor();
-            this.usingSimpleProcessor = false;
-        } catch (error) {
-            console.warn('Full PDF processor failed, using simple version:', error);
+        // 根据PDF.js加载状态选择合适的处理器
+        // 优先使用完整版本，但如果PDF.js不可用则使用简化版本
+        if (window.pdfJsAvailable && typeof PDFProcessor !== 'undefined') {
+            try {
+                this.pdfProcessor = new PDFProcessor();
+                this.usingSimpleProcessor = false;
+                console.log('Using full PDF processor with PDF.js support');
+            } catch (error) {
+                console.warn('Full PDF processor initialization failed, falling back to simple version:', error);
+                this.pdfProcessor = new PDFProcessorSimple();
+                this.usingSimpleProcessor = true;
+            }
+        } else {
+            console.warn('PDF.js not available or PDFProcessor not defined, using simplified version');
             this.pdfProcessor = new PDFProcessorSimple();
             this.usingSimpleProcessor = true;
         }
