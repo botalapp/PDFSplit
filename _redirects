@@ -1,0 +1,13 @@
+# Netlify redirects file
+# Handle client-side routing for single-page application
+
+# Redirect all requests to index.html for SPA behavior
+/*    /index.html   200
+
+# Force HTTPS
+http://pdfsplit-demo.netlify.app/*  https://pdfsplit-demo.netlify.app/:splat  301!
+
+# Cache static assets
+/src/css/*  200  Cache-Control:public,max-age=31536000,immutable
+/src/js/*   200  Cache-Control:public,max-age=31536000,immutable
+/src/assets/*  200  Cache-Control:public,max-age=31536000,immutable

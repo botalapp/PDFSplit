@@ -1,0 +1,40 @@
+{
+  "name": "pdfsplit",
+  "version": "1.0.0",
+  "description": "Online PDF splitting tool with client-side processing",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx live-server --port=3000 --host=localhost",
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "npx postcss src/css/main.css -o public/styles.css --use autoprefixer --use cssnano",
+    "build:js": "npx esbuild src/js/main.js --bundle --outfile=public/app.js --minify --target=es2020",
+    "preview": "npx live-server public --port=3001",
+    "lint": "npx eslint src/js/**/*.js",
+    "format": "npx prettier --write src/**/*.{js,css,html}"
+  },
+  "keywords": ["pdf", "split", "online", "tool", "client-side"],
+  "author": "PDFSplit",
+  "license": "MIT",
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.0.379"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "esbuild": "^0.19.8",
+    "eslint": "^8.55.0",
+    "live-server": "^1.2.2",
+    "postcss": "^8.4.32",
+    "postcss-cli": "^11.0.0",
+    "prettier": "^3.1.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
