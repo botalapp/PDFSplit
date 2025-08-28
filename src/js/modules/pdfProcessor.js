@@ -14,8 +14,11 @@ export class PDFProcessor {
      */
     initializePDFJS() {
         if (typeof pdfjsLib !== 'undefined') {
-            // PDF.js worker is already set up in HTML
-            console.log('PDF.js initialized');
+            // Set worker source
+            if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+            }
+            console.log('PDF.js initialized with worker:', pdfjsLib.GlobalWorkerOptions.workerSrc);
         } else {
             console.error('PDF.js not loaded');
         }
@@ -49,14 +52,27 @@ export class PDFProcessor {
             console.log('pdf-lib loaded successfully, pages:', pdfDoc.getPageCount());
             
             console.log('Loading PDF with PDF.js...');
-            // Load with PDF.js for rendering - simplified version first
+            // Load with PDF.js for rendering - with timeout
             const uint8Array = new Uint8Array(buffer);
+            console.log('Created Uint8Array, size:', uint8Array.length);
+            
             const loadingTask = pdfjsLib.getDocument({
                 data: uint8Array,
                 verbosity: 1
             });
             
-            const pdfViewer = await loadingTask.promise;
+            console.log('Created loading task, waiting for promise...');
+            
+            // Add timeout to prevent hanging
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('PDF.js loading timeout')), 10000)
+            );
+            
+            const pdfViewer = await Promise.race([
+                loadingTask.promise,
+                timeoutPromise
+            ]);
+            
             console.log('PDF.js loaded successfully, pages:', pdfViewer.numPages);
             
             const result = {

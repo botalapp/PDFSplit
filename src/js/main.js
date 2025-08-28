@@ -6,13 +6,24 @@
 // Import utility modules
 import { FileHandler } from './modules/fileHandler.js';
 import { PDFProcessor } from './modules/pdfProcessor.js';
+import { PDFProcessorSimple } from './modules/pdfProcessorSimple.js';
 import { UIController } from './modules/uiController.js';
 import { DownloadManager } from './modules/downloadManager.js';
 
 class PDFSplitApp {
     constructor() {
         this.fileHandler = new FileHandler();
-        this.pdfProcessor = new PDFProcessor();
+        
+        // Try to use full PDF processor, fallback to simple version
+        try {
+            this.pdfProcessor = new PDFProcessor();
+            this.usingSimpleProcessor = false;
+        } catch (error) {
+            console.warn('Full PDF processor failed, using simple version:', error);
+            this.pdfProcessor = new PDFProcessorSimple();
+            this.usingSimpleProcessor = true;
+        }
+        
         this.uiController = new UIController();
         this.downloadManager = new DownloadManager();
         
@@ -172,15 +183,33 @@ class PDFSplitApp {
         const thumbnails = [];
         const pageCount = this.currentPDF.getPageCount();
         
+        if (this.usingSimpleProcessor) {
+            console.log('Using simple processor - generating text-based thumbnails');
+        }
+        
         for (let i = 1; i <= pageCount; i++) {
             try {
-                const canvas = await this.pdfProcessor.renderPage(this.currentPDF, i, 120);
+                const thumbnail = await this.pdfProcessor.renderPage(this.currentPDF, i, 120);
                 thumbnails.push({
                     pageNumber: i,
-                    canvas: canvas
+                    canvas: thumbnail, // Could be canvas or div element
+                    isSimple: this.usingSimpleProcessor
                 });
             } catch (error) {
                 console.error(`Error generating thumbnail for page ${i}:`, error);
+                // Create fallback thumbnail
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.textContent = `第 ${i} 页`;
+                fallbackDiv.style.cssText = `
+                    width: 120px; height: 150px; border: 2px solid #ccc;
+                    display: flex; align-items: center; justify-content: center;
+                    background: white; font-size: 14px; color: #666;
+                `;
+                thumbnails.push({
+                    pageNumber: i,
+                    canvas: fallbackDiv,
+                    isSimple: true
+                });
             }
         }
         
@@ -199,16 +228,34 @@ class PDFSplitApp {
             item.className = 'thumbnail-item';
             item.dataset.page = thumbnail.pageNumber;
             
-            item.innerHTML = `
-                <canvas class="thumbnail-canvas"></canvas>
-                <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
-            `;
-            
-            const canvas = item.querySelector('.thumbnail-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = thumbnail.canvas.width;
-            canvas.height = thumbnail.canvas.height;
-            ctx.drawImage(thumbnail.canvas, 0, 0);
+            if (thumbnail.isSimple || thumbnail.canvas.tagName === 'DIV') {
+                // Simple text-based thumbnail
+                item.innerHTML = `
+                    <div class="thumbnail-simple">${thumbnail.canvas.innerHTML || thumbnail.canvas.textContent}</div>
+                    <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
+                `;
+            } else {
+                // Canvas-based thumbnail
+                item.innerHTML = `
+                    <canvas class="thumbnail-canvas"></canvas>
+                    <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
+                `;
+                
+                try {
+                    const canvas = item.querySelector('.thumbnail-canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = thumbnail.canvas.width;
+                    canvas.height = thumbnail.canvas.height;
+                    ctx.drawImage(thumbnail.canvas, 0, 0);
+                } catch (error) {
+                    console.warn('Failed to draw canvas thumbnail:', error);
+                    // Fallback to simple thumbnail
+                    item.innerHTML = `
+                        <div class="thumbnail-simple">第 ${thumbnail.pageNumber} 页</div>
+                        <div class="thumbnail-label">第 ${thumbnail.pageNumber} 页</div>
+                    `;
+                }
+            }
             
             item.addEventListener('click', () => {
                 item.classList.toggle('selected');
