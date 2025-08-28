@@ -106,17 +106,38 @@ export class FileHandler {
      * @returns {boolean} Whether file has valid PDF header
      */
     validatePDFHeader(buffer) {
+        // 基础检查
         if (!buffer || buffer.byteLength < 5) {
             return false;
         }
         
+        // 检查PDF文件头
         const uint8Array = new Uint8Array(buffer, 0, 5);
         const header = Array.from(uint8Array)
             .map(byte => String.fromCharCode(byte))
             .join('');
         
-        // PDF files start with %PDF-
-        return header === '%PDF-';
+        // PDF文件必须以%PDF-开头
+        if (header !== '%PDF-') {
+            return false;
+        }
+        
+        // 尝试检查文件尾（可选，但能提高验证准确性）
+        // 检查最后5个字节是否包含EOF标记
+        if (buffer.byteLength > 10) {
+            const endUint8Array = new Uint8Array(buffer, buffer.byteLength - 6, 6);
+            const endContent = Array.from(endUint8Array)
+                .map(byte => String.fromCharCode(byte))
+                .join('');
+            
+            // PDF文件通常在末尾包含%%EOF标记
+            if (!endContent.includes('%%EOF')) {
+                console.warn('PDF文件可能不完整，未找到%%EOF标记');
+                // 注意：这里不返回false，因为有些有效的PDF文件可能没有标准的EOF标记
+            }
+        }
+        
+        return true;
     }
 
     /**
