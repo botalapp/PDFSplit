@@ -1,31 +1,31 @@
-# 🚀 PDFSplit 部署指南
+# 🚀 PDFSplit Deployment Guide
 
-## 选择部署方式
+## Choose Deployment Method
 
-### 方式一：自动部署（推荐）
+### Method 1: Automatic Deployment (Recommended)
 
-如果你有 GitHub CLI，只需要运行：
+If you have GitHub CLI, simply run:
 
 ```bash
 chmod +x deploy.sh && ./deploy.sh
 ```
 
-### 方式二：半自动部署
+### Method 2: Semi-Automatic Deployment
 
-如果没有 GitHub CLI：
+If you don't have GitHub CLI:
 
 ```bash
 chmod +x deploy-manual.sh && ./deploy-manual.sh
 ```
 
-然后按照脚本输出的指示操作。
+Then follow the instructions provided by the script.
 
-### 方式三：完全手动部署
+### Method 3: Fully Manual Deployment
 
-#### 1. 初始化 Git 并提交代码
+#### 1. Initialize Git and commit code
 
 ```bash
-# 初始化 Git 仓库
+# Initialize Git repository
 git init
 
 # 配置用户信息

@@ -42,11 +42,11 @@ export class PDFProcessor {
                 throw new Error('PDF-lib library not loaded');
             }
             
-            // 检查PDF.js是否可用，如果不可用，提供更友好的错误信息并允许回退到简化版
+            // Check if PDF.js is available, if not provide friendly error message and allow fallback to simple version
             if (typeof pdfjsLib === 'undefined') {
                 console.warn('PDF.js library not loaded in PDFProcessor');
-                // 这里不再抛出错误，而是在main.js中已经处理了回退逻辑
-                // 创建一个基本的PDF对象，只使用pdf-lib功能
+                // No longer throw error here, fallback logic is handled in main.js
+                // Create a basic PDF object using only pdf-lib functionality
                 const pdfDoc = await PDFLib.PDFDocument.load(buffer);
                 return {
                     pdfLib: pdfDoc,

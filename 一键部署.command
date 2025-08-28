@@ -1,22 +1,22 @@
 #!/bin/bash
 
-# 设置脚本可以双击执行
+# Allow script to be executed by double-click
 cd "$(dirname "$0")"
 
-echo "🎉 欢迎使用 PDFSplit 一键部署工具！"
+echo "🎉 Welcome to PDFSplit One-Click Deployment Tool!"
 echo ""
-echo "📋 这个脚本将会："
-echo "   1. 检查并安装必要工具"
-echo "   2. 初始化 Git 仓库"
-echo "   3. 提交代码"
-echo "   4. 推送到 GitHub"
-echo "   5. 提供 Netlify 部署链接"
+echo "📋 This script will:"
+echo "   1. Check and install necessary tools"
+echo "   2. Initialize Git repository"
+echo "   3. Commit code"
+echo "   4. Push to GitHub"
+echo "   5. Provide Netlify deployment link"
 echo ""
 
-# 请求用户确认
-read -p "🤔 是否继续？(按回车键继续，或输入 n 退出): " confirm
+# Request user confirmation
+read -p "🤔 Continue? (Press Enter to continue, or type n to exit): " confirm
 if [[ $confirm == [nN] ]]; then
-    echo "❌ 已取消部署"
+    echo "❌ Deployment cancelled"
     exit 1
 fi
 

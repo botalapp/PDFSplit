@@ -1,52 +1,52 @@
-# PDFSplit - 免费在线 PDF 分割工具
+# PDFSplit - Free Online PDF Splitter
 
-一个现代化的客户端 PDF 分割工具，支持多种分割模式，完全在浏览器中处理，保护用户隐私。
+A modern client-side PDF splitting tool that supports multiple splitting modes, all processed entirely in the browser to protect user privacy.
 
-## ✨ 主要特性
+## ✨ Key Features
 
-- 🔒 **客户端处理** - 所有操作在本地完成，保护隐私安全
-- 📱 **响应式设计** - 完美适配移动端和桌面端
-- 🎯 **多种分割模式**：
-  - 按页数分割
-  - 按页面范围分割  
-  - 提取特定页面
-- 🖱️ **拖拽上传** - 支持文件拖拽和点击上传
-- 👀 **实时预览** - PDF 页面缩略图预览
-- ⚡ **快速处理** - 高性能的 PDF 处理引擎
-- 💾 **批量下载** - 支持单个或批量下载分割文件
+- 🔒 **Client-Side Processing** - All operations are performed locally to protect privacy
+- 📱 **Responsive Design** - Perfectly adapted for both mobile and desktop
+- 🎯 **Multiple Splitting Modes**: 
+  - Split by page count
+  - Split by page ranges
+  - Extract specific pages
+- 🖱️ **Drag & Drop Upload** - Support file drag and drop and click upload
+- 👀 **Real-Time Preview** - PDF page thumbnail preview
+- ⚡ **Fast Processing** - High-performance PDF processing engine
+- 💾 **Batch Download** - Support single or batch download of split files
 
-## 🚀 技术栈
+## 🚀 Tech Stack
 
-- **前端框架**: Vanilla JavaScript (ES6+ modules)
-- **PDF 处理**: pdf-lib, PDF.js
-- **样式**: 现代 CSS3 + CSS 变量
-- **构建工具**: ESBuild, PostCSS
-- **部署平台**: Netlify
+- **Frontend Framework**: Vanilla JavaScript (ES6+ modules)
+- **PDF Processing**: pdf-lib, PDF.js
+- **Styling**: Modern CSS3 + CSS variables
+- **Build Tools**: ESBuild, PostCSS
+- **Deployment Platform**: Netlify
 
-## 📦 安装与运行
+## 📦 Installation & Running
 
-### 1. 克隆项目
+### 1. Clone the project
 
 ```bash
 git clone <repository-url>
 cd PDFSplit
 ```
 
-### 2. 安装依赖
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. 开发模式
+### 3. Development mode
 
 ```bash
 npm run dev
 ```
 
-应用将在 `http://localhost:3000` 启动
+The application will start at `http://localhost:3000`
 
-### 4. 构建生产版本
+### 4. Build for production
 
 ```bash
 npm run build

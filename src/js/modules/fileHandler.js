@@ -19,7 +19,7 @@ export class FileHandler {
         if (!file) {
             return {
                 isValid: false,
-                error: '请选择一个文件'
+                error: 'Please select a file'
             };
         }
 
@@ -27,7 +27,7 @@ export class FileHandler {
         if (!file.name.toLowerCase().endsWith('.pdf')) {
             return {
                 isValid: false,
-                error: '请上传 PDF 文件（.pdf 格式）'
+                error: 'Please upload a PDF file (.pdf format)'
             };
         }
 
@@ -35,7 +35,7 @@ export class FileHandler {
         if (file.type && !this.allowedTypes.includes(file.type) && file.type !== '') {
             return {
                 isValid: false,
-                error: '文件类型不正确，请上传 PDF 文件'
+                error: 'Incorrect file type. Please upload a PDF file'
             };
         }
 
@@ -44,7 +44,7 @@ export class FileHandler {
             const maxSizeMB = this.maxFileSize / (1024 * 1024);
             return {
                 isValid: false,
-                error: `文件大小不能超过 ${maxSizeMB}MB`
+                error: `File size cannot exceed ${maxSizeMB}MB`
             };
         }
 
@@ -52,7 +52,7 @@ export class FileHandler {
         if (file.size === 0) {
             return {
                 isValid: false,
-                error: '文件不能为空'
+                error: 'File cannot be empty'
             };
         }
 
@@ -60,7 +60,7 @@ export class FileHandler {
         if (file.size < 1024) {
             return {
                 isValid: false,
-                error: '文件过小，可能不是有效的 PDF 文件'
+                error: 'File is too small, it may not be a valid PDF file'
             };
         }
 
@@ -85,7 +85,7 @@ export class FileHandler {
                 // Validate PDF file header
                 const isValidPDF = this.validatePDFHeader(arrayBuffer);
                 if (!isValidPDF) {
-                    reject(new Error('不是有效的 PDF 文件格式'));
+                    reject(new Error('Not a valid PDF file format'));
                     return;
                 }
                 
@@ -93,7 +93,7 @@ export class FileHandler {
             };
             
             reader.onerror = (e) => {
-                reject(new Error('读取文件失败'));
+                reject(new Error('Failed to read file'));
             };
             
             reader.readAsArrayBuffer(file);

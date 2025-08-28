@@ -157,19 +157,19 @@ class PDFSplitApp {
             }
 
             this.currentFileName = file.name;
-            this.uiController.showProgress(0, '正在读取 PDF 文件...');
+            this.uiController.showProgress(0, 'Reading PDF file...');
             
             // Read file
             const arrayBuffer = await this.fileHandler.readFile(file);
-            this.uiController.updateProgress(30, '正在解析 PDF...');
+            this.uiController.updateProgress(30, 'Parsing PDF...');
             
             // Load PDF
             this.currentPDF = await this.pdfProcessor.loadPDF(arrayBuffer);
-            this.uiController.updateProgress(60, '正在生成预览...');
+            this.uiController.updateProgress(60, 'Generating preview...');
             
             // Generate thumbnails
             const thumbnails = await this.generateThumbnails();
-            this.uiController.updateProgress(90, '完成处理...');
+            this.uiController.updateProgress(90, 'Processing complete...');
             
             // Update UI
             this.updateFileInfo();
@@ -180,7 +180,7 @@ class PDFSplitApp {
         } catch (error) {
             console.error('File upload error:', error);
             this.uiController.hideProgress();
-            this.uiController.showError('处理 PDF 文件时出错: ' + error.message);
+            this.uiController.showError('Error processing PDF file: ' + error.message);
         }
     }
 
