@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MWXHJLMR');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free online PDF splitter tool that supports splitting by page count, page ranges. All processing is done locally to protect your privacy.">
-    <meta name="keywords" content="PDF split,PDF splitter,online tool,client-side processing">
-    <title>PDFSplit - Free Online PDF Splitter</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Free online PDF splitter tool to split PDF files into separate documents quickly and easily. Split by pages, extract specific pages, or split by page ranges. 100% free, no installation required, and all processing done locally to protect your privacy.">
+    <meta name="keywords" content="PDF split, split PDF, PDF splitter, split PDF online, free PDF splitter, online PDF splitter, split PDF pages, extract PDF pages, PDF page extractor, split PDF into separate files">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="PDFSplit">
+    <meta name="google-site-verification" content="your-google-verification-code-here"> <!-- Google Search Console验证代码 -->
+    <title>PDFSplit - Free Online PDF Splitter Tool | Split PDF Files Easily</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="src/assets/favicon.svg">
@@ -17,8 +28,97 @@
     <!-- Preload critical resources -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" as="script">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js" as="script">
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="PDFSplit - Free Online PDF Splitter Tool">
+    <meta property="og:description" content="Free online PDF splitter tool to split PDF files into separate documents quickly and easily. All processing done locally to protect your privacy.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pdfsplit.example.com"> <!-- 替换为实际域名 -->
+    <meta property="og:image" content="src/assets/favicon.svg">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="PDFSplit - Free Online PDF Splitter Tool">
+    <meta name="twitter:description" content="Free online PDF splitter tool to split PDF files into separate documents quickly and easily. All processing done locally to protect your privacy.">
+    <meta name="twitter:image" content="src/assets/favicon.svg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://pdfsplit.example.com"> <!-- 替换为实际域名 -->
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "PDFSplit",
+      "description": "Free online PDF splitter tool to split PDF files into separate documents quickly and easily. Split by pages, extract specific pages, or split by page ranges.",
+      "url": "https://pdfsplit.example.com",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "featureList": ["Split PDF files by page count","Split PDF files by page ranges","Extract specific pages from PDF","100% free to use","No installation required","All processing done locally","Privacy protection"]
+    }
+    </script>
+    
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to split a PDF file online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To split a PDF file online with PDFSplit, simply upload your PDF file, choose your preferred split mode (split by page count, split by page ranges, or extract specific pages), and click the \"Split PDF\" button. Your PDF will be split in seconds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is PDFSplit free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, PDFSplit is completely free to use. You can split as many PDF files as you need without any limitations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my PDF file secure when using PDFSplit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! All PDF processing is done locally in your browser, which means your files never leave your computer. PDFSplit does not upload your files to any server, ensuring complete privacy and security."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the maximum file size supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PDFSplit supports PDF files up to 50MB in size. For larger files, we recommend compressing your PDF first or splitting it into smaller parts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I split password-protected PDF files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, currently PDFSplit does not support splitting password-protected or encrypted PDF files. You will need to decrypt the PDF file first before using our tool."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MWXHJLMR"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -143,6 +243,74 @@
             </section>
         </div>
     </main>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-items">
+                <div class="faq-item">
+                    <h3>How to split a PDF file online?</h3>
+                    <p>To split a PDF file online with PDFSplit, simply upload your PDF file, choose your preferred split mode (split by page count, split by page ranges, or extract specific pages), and click the "Split PDF" button. Your PDF will be split in seconds.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is PDFSplit free to use?</h3>
+                    <p>Yes, PDFSplit is completely free to use. You can split as many PDF files as you need without any limitations.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is my PDF file secure when using PDFSplit?</h3>
+                    <p>Absolutely! All PDF processing is done locally in your browser, which means your files never leave your computer. PDFSplit does not upload your files to any server, ensuring complete privacy and security.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What is the maximum file size supported?</h3>
+                    <p>PDFSplit supports PDF files up to 50MB in size. For larger files, we recommend compressing your PDF first or splitting it into smaller parts.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I split password-protected PDF files?</h3>
+                    <p>No, currently PDFSplit does not support splitting password-protected or encrypted PDF files. You will need to decrypt the PDF file first before using our tool.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2>Why Choose PDFSplit?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Processing</h3>
+                    <p>Split your PDF files in seconds with our high-performance processing engine.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% Secure</h3>
+                    <p>All processing is done locally in your browser. Your files never leave your computer.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💻</div>
+                    <h3>No Installation</h3>
+                    <p>Use PDFSplit directly from your browser without installing any software.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Works perfectly on all devices, including smartphones and tablets.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Multiple Split Modes</h3>
+                    <p>Choose from multiple splitting options to meet your specific needs.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💾</div>
+                    <h3>Batch Download</h3>
+                    <p>Download all split PDF files at once for your convenience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
