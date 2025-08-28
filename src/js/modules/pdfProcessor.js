@@ -27,32 +27,55 @@ export class PDFProcessor {
      * @returns {Promise<Object>} PDF document object
      */
     async loadPDF(buffer) {
+        console.log('Starting PDF loading...', { 
+            bufferSize: buffer?.byteLength,
+            PDFLibAvailable: typeof PDFLib !== 'undefined',
+            pdfjsLibAvailable: typeof pdfjsLib !== 'undefined'
+        });
+
         try {
+            // Check if libraries are loaded
+            if (typeof PDFLib === 'undefined') {
+                throw new Error('PDF-lib library not loaded');
+            }
+            
+            if (typeof pdfjsLib === 'undefined') {
+                throw new Error('PDF.js library not loaded');
+            }
+
+            console.log('Loading PDF with pdf-lib...');
             // Load with pdf-lib for manipulation
             const pdfDoc = await PDFLib.PDFDocument.load(buffer);
+            console.log('pdf-lib loaded successfully, pages:', pdfDoc.getPageCount());
             
-            // Load with PDF.js for rendering
+            console.log('Loading PDF with PDF.js...');
+            // Load with PDF.js for rendering - simplified version first
             const uint8Array = new Uint8Array(buffer);
             const loadingTask = pdfjsLib.getDocument({
                 data: uint8Array,
-                cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/cmaps/',
-                cMapPacked: true,
-                standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/standard_fonts/',
-                disableStream: false,
-                disableAutoFetch: false,
-                verbosity: 0
+                verbosity: 1
             });
             
             const pdfViewer = await loadingTask.promise;
+            console.log('PDF.js loaded successfully, pages:', pdfViewer.numPages);
             
-            return {
+            const result = {
                 pdfLib: pdfDoc,
                 pdfJS: pdfViewer,
                 getPageCount: () => pdfDoc.getPageCount(),
                 buffer: buffer
             };
+            
+            console.log('PDF loading completed successfully');
+            return result;
         } catch (error) {
-            console.error('PDF loading error:', error);
+            console.error('PDF loading error details:', {
+                error: error,
+                message: error.message,
+                name: error.name,
+                stack: error.stack,
+                bufferSize: buffer ? buffer.byteLength : 'no buffer'
+            });
             
             // 提供更详细的错误信息
             let errorMessage = 'PDF 处理失败';
@@ -68,6 +91,12 @@ export class PDFProcessor {
                 errorMessage = '文件不是 PDF 格式';
             } else if (error.name === 'UnexpectedResponseException') {
                 errorMessage = '网络错误，请重试';
+            } else if (error.message.includes('Cannot read properties')) {
+                errorMessage = 'PDF 库加载失败，请刷新页面重试';
+            } else if (error.message.includes('PDFLib is not defined') || error.message.includes('pdfjsLib is not defined')) {
+                errorMessage = 'PDF 处理库未正确加载，请刷新页面';
+            } else {
+                errorMessage = `PDF 处理失败: ${error.message}`;
             }
             
             throw new Error(errorMessage);

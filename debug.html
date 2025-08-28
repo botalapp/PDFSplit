@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFSplit Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-info { background: #f5f5f5; padding: 10px; margin: 10px 0; }
+        .error { color: red; }
+        .success { color: green; }
+        .warning { color: orange; }
+        #console { height: 300px; overflow-y: scroll; background: #000; color: #0f0; padding: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>PDFSplit Debug Page</h1>
+    
+    <div class="debug-info">
+        <h3>Library Status</h3>
+        <div id="libraryStatus"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Test PDF Upload</h3>
+        <input type="file" id="testFile" accept=".pdf">
+        <button onclick="testPDF()">Test PDF Processing</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Console Output</h3>
+        <div id="console"></div>
+        <button onclick="clearConsole()">Clear Console</button>
+    </div>
+
+    <!-- Same scripts as main page -->
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+    <script>
+        // Console logging to div
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f00' : type === 'warning' ? '#ff0' : '#0f0';
+            console.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+            
+            // Also log to browser console
+            if (type === 'error') {
+                console.error(message);
+            } else if (type === 'warning') {
+                console.warn(message);
+            } else {
+                console.log(message);
+            }
+        }
+
+        function clearConsole() {
+            document.getElementById('console').innerHTML = '';
+        }
+
+        // Override console methods
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            log(args.join(' '), 'info');
+            originalLog.apply(console, args);
+        };
+
+        console.error = function(...args) {
+            log(args.join(' '), 'error');
+            originalError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+            log(args.join(' '), 'warning');
+            originalWarn.apply(console, args);
+        };
+
+        // Check library status
+        function checkLibraries() {
+            const status = document.getElementById('libraryStatus');
+            let html = '';
+            
+            // Check PDF-lib
+            if (typeof PDFLib !== 'undefined') {
+                html += '<div class="success">✓ PDF-lib loaded successfully</div>';
+                log('PDF-lib is available', 'info');
+            } else {
+                html += '<div class="error">✗ PDF-lib not loaded</div>';
+                log('PDF-lib is NOT available', 'error');
+            }
+            
+            // Check PDF.js
+            if (typeof pdfjsLib !== 'undefined') {
+                html += '<div class="success">✓ PDF.js loaded successfully</div>';
+                html += `<div>PDF.js version: ${pdfjsLib.version || 'unknown'}</div>`;
+                log('PDF.js is available', 'info');
+                
+                // Check worker
+                if (pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                    html += '<div class="success">✓ PDF.js worker configured</div>';
+                    log('PDF.js worker is configured', 'info');
+                } else {
+                    html += '<div class="warning">! PDF.js worker not configured</div>';
+                    log('PDF.js worker is NOT configured', 'warning');
+                }
+            } else {
+                html += '<div class="error">✗ PDF.js not loaded</div>';
+                log('PDF.js is NOT available', 'error');
+            }
+            
+            status.innerHTML = html;
+        }
+
+        // Test PDF processing
+        async function testPDF() {
+            const fileInput = document.getElementById('testFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                log('Please select a PDF file first', 'warning');
+                return;
+            }
+            
+            log(`Testing PDF: ${file.name} (${file.size} bytes)`, 'info');
+            
+            try {
+                // Read file
+                log('Reading file...', 'info');
+                const arrayBuffer = await readFile(file);
+                log(`File read successfully: ${arrayBuffer.byteLength} bytes`, 'info');
+                
+                // Test PDF-lib
+                log('Testing PDF-lib...', 'info');
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                log(`PDF-lib success: ${pdfDoc.getPageCount()} pages`, 'info');
+                
+                // Test PDF.js
+                log('Testing PDF.js...', 'info');
+                const uint8Array = new Uint8Array(arrayBuffer);
+                const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+                const pdfViewer = await loadingTask.promise;
+                log(`PDF.js success: ${pdfViewer.numPages} pages`, 'info');
+                
+                log('✓ All tests passed!', 'info');
+                
+            } catch (error) {
+                log(`✗ Test failed: ${error.message}`, 'error');
+                log(`Error details: ${JSON.stringify(error)}`, 'error');
+            }
+        }
+
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = e => reject(new Error('File read failed'));
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        // Initialize PDF.js
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+            log('PDF.js worker configured', 'info');
+        }
+
+        // Check libraries when page loads
+        window.addEventListener('load', () => {
+            setTimeout(checkLibraries, 1000); // Wait a bit for libraries to load
+        });
+    </script>
+</body>
+</html>
