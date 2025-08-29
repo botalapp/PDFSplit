@@ -36,8 +36,8 @@
     <link rel="stylesheet" href="src/css/main.css">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js" as="script">
+    <link rel="preload" href="node_modules/pdf-lib/dist/pdf-lib.min.js" as="script">
+    <link rel="preload" href="node_modules/pdfjs-dist/build/pdf.min.mjs" as="script">
     
     <!-- Social Media Meta Tags -->
     <meta property="og:title" content="PDFSplit - Free Online PDF Splitter Tool">
@@ -134,12 +134,16 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14,2 14,8 20,8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <polyline points="10,9 9,9 8,9"/>
+                    <!-- 专业PDF文档图标 -->
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="18" rx="1.5" ry="1.5" fill="#FFFFFF" stroke="#EE573C" stroke-width="1.5"/>
+                        <!-- 文档顶部装饰 -->
+                        <path d="M3 4H21V6" fill="none" stroke="#EE573C" stroke-width="1.5"/>
+                        <path d="M12 4V8" stroke="#EE573C" stroke-width="1.5"/>
+                        <!-- 文档内容线条 -->
+                        <path d="M6 11H18" stroke="#EE573C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M6 14H18" stroke="#EE573C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M6 17H15" stroke="#EE573C" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                     <h1>PDFSplit</h1>
                 </div>
@@ -196,7 +200,7 @@
                             <div class="radio-option">
                                 <input type="radio" id="splitByPages" name="splitMode" value="pages" checked>
                                 <label for="splitByPages">Split by Page Count</label>
-                                <div class="option-details" id="splitByPagesDetails">
+                                <div class="option-details" id="splitByPagesDetails" style="display: none;">
                                     <input type="number" id="pagesPerFile" min="1" value="1" placeholder="Pages per file">
                                 </div>
                             </div>
@@ -227,7 +231,7 @@
                                             Include Odd Pages
                                         </label>
                                         <label class="checkbox-option">
-                                            <input type="checkbox" id="includeEvenPages">
+                                            <input type="checkbox" id="includeEvenPages" checked>
                                             Include Even Pages
                                         </label>
                                     </div>
@@ -353,28 +357,30 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <!-- 从本地node_modules加载pdf-lib，避免跨域问题 -->
+    <script src="node_modules/pdf-lib/dist/pdf-lib.min.js" type="module"></script>
     
-    <!-- PDF.js 加载 -->
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+    <!-- 从本地node_modules加载PDF.js，使用正确的mjs文件格式和模块类型 -->
+    <script src="node_modules/pdfjs-dist/build/pdf.min.mjs" type="module"></script>
     
     <script>
         // 全局标志，标记PDF.js是否加载成功
         window.pdfJsAvailable = false;
         
-        // 立即检查PDF.js是否加载
-        if (typeof pdfjsLib !== 'undefined') {
+        // 延迟检查PDF.js是否加载，因为模块脚本是异步加载的
+        setTimeout(() => {
+            if (typeof window.pdfjsLib !== 'undefined') {
             try {
-                // Set up PDF.js worker and configuration
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+                // Set up PDF.js worker and configuration from local files with correct mjs format
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs';
                 
-                // Configure PDF.js
-                pdfjsLib.GlobalWorkerOptions.cMapUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/cmaps/';
+                // Configure PDF.js with correct paths
+                pdfjsLib.GlobalWorkerOptions.cMapUrl = 'node_modules/pdfjs-dist/cmaps/';
                 pdfjsLib.GlobalWorkerOptions.cMapPacked = true;
-                pdfjsLib.GlobalWorkerOptions.standardFontDataUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/standard_fonts/';
+                pdfjsLib.GlobalWorkerOptions.standardFontDataUrl = 'node_modules/pdfjs-dist/standard_fonts/';
                 
                 window.pdfJsAvailable = true;
-                console.log('PDF.js initialized successfully');
+                console.log('PDF.js initialized successfully with local mjs files');
             } catch (error) {
                 console.error('PDF.js initialization error:', error);
                 window.pdfJsAvailable = false;
@@ -383,6 +389,7 @@
             console.warn('PDF.js not available, will use simplified version');
             window.pdfJsAvailable = false;
         }
+        }, 100); // 100ms的延迟，给模块加载一些时间
     </script>
     
     <!-- 直接加载主脚本 -->

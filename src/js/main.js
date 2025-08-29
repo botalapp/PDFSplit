@@ -56,6 +56,17 @@ class PDFSplitApp {
      * Set up all event listeners
      */
     setupEventListeners() {
+        // Logo click to go back to homepage
+        const logoElement = document.querySelector('.logo');
+        if (logoElement) {
+            logoElement.addEventListener('click', () => {
+                // Reload the page to return to the home state
+                window.location.reload();
+            });
+            // Add cursor style to indicate clickable
+            logoElement.style.cursor = 'pointer';
+        }
+        
         // File input change
         document.getElementById('fileInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -116,24 +127,9 @@ class PDFSplitApp {
      * Set up split mode toggling
      */
     setupSplitModeToggling() {
-        const splitModes = document.querySelectorAll('input[name="splitMode"]');
-        
-        splitModes.forEach(mode => {
-            mode.addEventListener('change', () => {
-                // Hide all option details
-                document.querySelectorAll('.option-details').forEach(detail => {
-                    detail.style.display = 'none';
-                });
-                
-                // Show selected mode details
-                const selectedDetails = document.getElementById(mode.value === 'pages' ? 'splitByPagesDetails' : 
-                                                              mode.value === 'range' ? 'splitByRangeDetails' : 
-                                                              'extractPagesDetails');
-                if (selectedDetails) {
-                    selectedDetails.style.display = 'block';
-                }
-            });
-        });
+        // This method is no longer needed as we've removed the automatic display of option details
+        // when split mode changes
+        console.log('Split mode toggling is disabled');
     }
 
     /**
@@ -231,10 +227,27 @@ class PDFSplitApp {
         const grid = document.getElementById('thumbnailsGrid');
         grid.innerHTML = '';
         
+        // 设置grid的样式，确保它能够正确显示
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(120px, 1fr))';
+        grid.style.gap = '1rem';
+        grid.style.maxHeight = '400px';
+        grid.style.overflowY = 'auto';
+        
         thumbnails.forEach(thumbnail => {
             const item = document.createElement('div');
             item.className = 'thumbnail-item';
             item.dataset.page = thumbnail.pageNumber;
+            
+            // 为每个缩略图项设置样式
+            item.style.position = 'relative';
+            item.style.borderRadius = 'var(--radius)';
+            item.style.overflow = 'hidden';
+            item.style.background = 'white';
+            item.style.boxShadow = 'var(--shadow-sm)';
+            item.style.transition = 'all var(--transition)';
+            item.style.cursor = 'pointer';
+            item.style.display = 'block';
             
             if (thumbnail.isSimple || thumbnail.canvas.tagName === 'DIV') {
                 // Simple text-based thumbnail
@@ -244,20 +257,34 @@ class PDFSplitApp {
                 `;
             } else {
                 // Canvas-based thumbnail
-                item.innerHTML = `
-                    <canvas class="thumbnail-canvas"></canvas>
-                    <div class="thumbnail-label">Page ${thumbnail.pageNumber}</div>
-                `;
                 
-                try {
-                    const canvas = item.querySelector('.thumbnail-canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = thumbnail.canvas.width;
-                    canvas.height = thumbnail.canvas.height;
-                    ctx.drawImage(thumbnail.canvas, 0, 0);
-                } catch (error) {
-                    console.warn('Failed to draw canvas thumbnail:', error);
-                    // Fallback to simple thumbnail
+                // 直接使用返回的canvas，而不是创建新的canvas并绘制
+                if (thumbnail.canvas instanceof HTMLCanvasElement) {
+                    // 为canvas设置适当的样式
+                    thumbnail.canvas.className = 'thumbnail-canvas';
+                    thumbnail.canvas.style.width = '100%';
+                    thumbnail.canvas.style.height = 'auto';
+                    thumbnail.canvas.style.display = 'block';
+                    
+                    // 添加标签元素
+                    const label = document.createElement('div');
+                    label.className = 'thumbnail-label';
+                    label.textContent = `Page ${thumbnail.pageNumber}`;
+                    label.style.position = 'absolute';
+                    label.style.bottom = '0';
+                    label.style.left = '0';
+                    label.style.right = '0';
+                    label.style.background = 'rgba(0, 0, 0, 0.7)';
+                    label.style.color = 'white';
+                    label.style.fontSize = 'var(--font-size-xs)';
+                    label.style.padding = '0.25rem 0.5rem';
+                    label.style.textAlign = 'center';
+                    
+                    // 将canvas和标签添加到item
+                    item.appendChild(thumbnail.canvas);
+                    item.appendChild(label);
+                } else {
+                    // 如果不是canvas，回退到简单缩略图
                     item.innerHTML = `
                         <div class="thumbnail-simple">Page ${thumbnail.pageNumber}</div>
                         <div class="thumbnail-label">Page ${thumbnail.pageNumber}</div>
@@ -303,25 +330,10 @@ class PDFSplitApp {
      * Handle split mode change
      */
     handleSplitModeChange(e) {
-        const mode = e.target.value;
         const details = document.querySelectorAll('.option-details');
         
+        // Only hide all details, no longer show any specific one
         details.forEach(detail => detail.style.display = 'none');
-        
-        switch (mode) {
-            case 'pages':
-                document.getElementById('splitByPagesDetails').style.display = 'block';
-                break;
-            case 'range':
-                document.getElementById('splitByRangeDetails').style.display = 'block';
-                break;
-            case 'extract':
-                document.getElementById('extractPagesDetails').style.display = 'block';
-                break;
-            case 'parity':
-                document.getElementById('splitByParityDetails').style.display = 'block';
-                break;
-        }
     }
 
     /**
@@ -338,6 +350,7 @@ class PDFSplitApp {
             
             const splitMode = document.querySelector('input[name="splitMode"]:checked').value;
             const splitOptions = this.getSplitOptions(splitMode);
+            console.log('Starting split with mode:', splitMode, 'and options:', splitOptions);
             
             if (!splitOptions) {
                 this.uiController.hideLoadingOverlay();
@@ -448,6 +461,8 @@ class PDFSplitApp {
     displayResults() {
         const downloadList = document.getElementById('downloadList');
         downloadList.innerHTML = '';
+        
+        console.log('Split results array:', this.splitResults);
         
         this.splitResults.forEach((result, index) => {
             const item = document.createElement('div');

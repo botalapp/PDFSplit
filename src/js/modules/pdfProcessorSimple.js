@@ -230,6 +230,7 @@ export class PDFProcessorSimple {
         const results = [];
         
         console.log(`Splitting PDF by parity: odd=${includeOddPages}, even=${includeEvenPages}`);
+        console.log('Parity split options:', { includeOddPages, includeEvenPages, totalPages });
         
         // Process odd pages if selected
         if (includeOddPages) {
@@ -240,25 +241,33 @@ export class PDFProcessorSimple {
                 }
             }
             
+            console.log('Odd pages to extract:', oddPages);
+            
             if (oddPages.length > 0) {
-                const pageIndices = oddPages.map(p => p - 1); // Convert to 0-based
-                const newPDF = await PDFLib.PDFDocument.create();
-                const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
-                
-                copiedPages.forEach(page => newPDF.addPage(page));
-                
-                const pdfBytes = await newPDF.save();
-                const suffix = 'odd_pages';
-                const filename = this.generateFilename(originalFilename, suffix);
-                const url = this.createDownloadUrl(pdfBytes);
-                const pageInfo = `Odd Pages (${oddPages.length} pages)`;
-                
-                results.push({
-                    filename,
-                    url,
-                    size: pdfBytes.length,
-                    pageInfo
-                });
+                try {
+                    const pageIndices = oddPages.map(p => p - 1); // Convert to 0-based
+                    const newPDF = await PDFLib.PDFDocument.create();
+                    const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
+                    
+                    copiedPages.forEach(page => newPDF.addPage(page));
+                    
+                    const pdfBytes = await newPDF.save();
+                    const suffix = 'odd_pages';
+                    const filename = this.generateFilename(originalFilename, suffix);
+                    const url = this.createDownloadUrl(pdfBytes);
+                    const pageInfo = `Odd Pages (${oddPages.length} pages)`;
+                    
+                    results.push({
+                        filename,
+                        url,
+                        size: pdfBytes.length,
+                        pageInfo
+                    });
+                    
+                    console.log('Added odd pages result:', filename);
+                } catch (error) {
+                    console.error('Error processing odd pages:', error);
+                }
             }
         }
         
@@ -271,28 +280,37 @@ export class PDFProcessorSimple {
                 }
             }
             
+            console.log('Even pages to extract:', evenPages);
+            
             if (evenPages.length > 0) {
-                const pageIndices = evenPages.map(p => p - 1); // Convert to 0-based
-                const newPDF = await PDFLib.PDFDocument.create();
-                const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
-                
-                copiedPages.forEach(page => newPDF.addPage(page));
-                
-                const pdfBytes = await newPDF.save();
-                const suffix = 'even_pages';
-                const filename = this.generateFilename(originalFilename, suffix);
-                const url = this.createDownloadUrl(pdfBytes);
-                const pageInfo = `Even Pages (${evenPages.length} pages)`;
-                
-                results.push({
-                    filename,
-                    url,
-                    size: pdfBytes.length,
-                    pageInfo
-                });
+                try {
+                    const pageIndices = evenPages.map(p => p - 1); // Convert to 0-based
+                    const newPDF = await PDFLib.PDFDocument.create();
+                    const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
+                    
+                    copiedPages.forEach(page => newPDF.addPage(page));
+                    
+                    const pdfBytes = await newPDF.save();
+                    const suffix = 'even_pages';
+                    const filename = this.generateFilename(originalFilename, suffix);
+                    const url = this.createDownloadUrl(pdfBytes);
+                    const pageInfo = `Even Pages (${evenPages.length} pages)`;
+                    
+                    results.push({
+                        filename,
+                        url,
+                        size: pdfBytes.length,
+                        pageInfo
+                    });
+                    
+                    console.log('Added even pages result:', filename);
+                } catch (error) {
+                    console.error('Error processing even pages:', error);
+                }
             }
         }
         
+        console.log('Final split results count:', results.length);
         return results;
     }
 
