@@ -307,7 +307,7 @@ class PDFSplitApp {
     updateFileInfo() {
         const fileInfo = document.getElementById('fileInfo');
         const pageCount = this.currentPDF.getPageCount();
-        fileInfo.textContent = `文件名: ${this.currentFileName} | 总页数: ${pageCount} 页`;
+        fileInfo.textContent = `File: ${this.currentFileName} | Total pages: ${pageCount}`;
     }
 
     /**
@@ -341,12 +341,12 @@ class PDFSplitApp {
      */
     async handleSplit() {
         if (!this.currentPDF) {
-            this.uiController.showError('请先上传 PDF 文件');
+            this.uiController.showError('Please upload a PDF file first');
             return;
         }
 
         try {
-            this.uiController.showLoadingOverlay('正在分割 PDF...');
+            this.uiController.showLoadingOverlay('Splitting PDF...');
             
             const splitMode = document.querySelector('input[name="splitMode"]:checked').value;
             const splitOptions = this.getSplitOptions(splitMode);
@@ -371,7 +371,7 @@ class PDFSplitApp {
         } catch (error) {
             console.error('Split error:', error);
             this.uiController.hideLoadingOverlay();
-            this.uiController.showError('分割 PDF 时出错: ' + error.message);
+            this.uiController.showError('Error splitting PDF: ' + error.message);
         }
     }
 
@@ -383,7 +383,7 @@ class PDFSplitApp {
             case 'pages':
                 const pagesPerFile = parseInt(document.getElementById('pagesPerFile').value);
                 if (!pagesPerFile || pagesPerFile < 1) {
-                    this.uiController.showError('请输入有效的页数');
+                    this.uiController.showError('Please enter a valid number of pages');
                     return null;
                 }
                 return { pagesPerFile };
@@ -391,7 +391,7 @@ class PDFSplitApp {
             case 'range':
                 const pageRanges = document.getElementById('pageRanges').value;
                 if (!pageRanges.trim()) {
-                    this.uiController.showError('请输入页面范围');
+                    this.uiController.showError('Please enter page ranges');
                     return null;
                 }
                 return { ranges: this.parsePageRanges(pageRanges) };
@@ -399,7 +399,7 @@ class PDFSplitApp {
             case 'extract':
                 const specificPages = document.getElementById('specificPages').value;
                 if (!specificPages.trim()) {
-                    this.uiController.showError('请选择要提取的页面');
+                    this.uiController.showError('Please select pages to extract');
                     return null;
                 }
                 return { pages: this.parsePageNumbers(specificPages) };
@@ -481,7 +481,7 @@ class PDFSplitApp {
                         <p>${result.pageInfo} | ${this.formatFileSize(result.size)}</p>
                     </div>
                 </div>
-                <a href="${result.url}" download="${result.filename}" class="download-btn">下载</a>
+                <a href="${result.url}" download="${result.filename}" class="download-btn">Download</a>
             `;
             
             downloadList.appendChild(item);

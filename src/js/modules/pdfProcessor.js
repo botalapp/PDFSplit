@@ -13,21 +13,12 @@ export class PDFProcessor {
      * Initialize PDF.js
      */
     initializePDFJS() {
-        // 确保我们使用全局的pdfjsLib实例
-        if (typeof window.pdfjsLib !== 'undefined') {
-            // 保存对全局pdfjsLib的引用
-            this.pdfjsLib = window.pdfjsLib;
-            
-            // 确保设置了worker源
-            if (!this.pdfjsLib.GlobalWorkerOptions.workerSrc) {
-                this.pdfjsLib.GlobalWorkerOptions.workerSrc = 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs';
+        if (typeof pdfjsLib !== 'undefined') {
+            // Set worker source
+            if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
             }
-            
-            // 配置其他必要的选项
-            this.pdfjsLib.GlobalWorkerOptions.cMapUrl = 'node_modules/pdfjs-dist/cmaps/';
-            this.pdfjsLib.GlobalWorkerOptions.cMapPacked = true;
-            
-            console.log('PDF.js initialized with worker:', this.pdfjsLib.GlobalWorkerOptions.workerSrc);
+            console.log('PDF.js initialized with worker:', pdfjsLib.GlobalWorkerOptions.workerSrc);
         } else {
             console.error('PDF.js not loaded');
         }
@@ -39,10 +30,6 @@ export class PDFProcessor {
      * @returns {Promise<Object>} PDF document object
      */
     async loadPDF(buffer) {
-        // 确保使用正确的库实例
-        const PDFLib = window.PDFLib;
-        const pdfjsLib = this.pdfjsLib || window.pdfjsLib;
-        
         console.log('Starting PDF loading...', { 
             bufferSize: buffer?.byteLength,
             PDFLibAvailable: typeof PDFLib !== 'undefined',
@@ -80,15 +67,9 @@ export class PDFProcessor {
             const uint8Array = new Uint8Array(buffer);
             console.log('Created Uint8Array, size:', uint8Array.length);
             
-            // 配置PDF.js加载选项，使用本地路径
             const loadingTask = pdfjsLib.getDocument({
                 data: uint8Array,
-                verbosity: 1,
-                cMapUrl: 'node_modules/pdfjs-dist/cmaps/',
-                cMapPacked: true,
-                standardFontDataUrl: 'node_modules/pdfjs-dist/standard_fonts/',
-                // 增加最大尺寸限制以支持大文件
-                maxImageSize: 4096 * 4096
+                verbosity: 1
             });
             
             console.log('Created loading task, waiting for promise...');
@@ -163,27 +144,13 @@ export class PDFProcessor {
      */
     async renderPage(pdf, pageNum, scale = 1.0) {
         try {
-            // 确保使用正确的pdfjsLib实例
-            const pdfjsLib = this.pdfjsLib || window.pdfjsLib;
-            
-            if (!pdfjsLib) {
-                throw new Error('PDF.js library not available');
-            }
-            
-            if (!pdf.pdfJS) {
-                throw new Error('PDF JS document not loaded');
-            }
-            
             const page = await pdf.pdfJS.getPage(pageNum);
             const viewport = page.getViewport({ scale });
             
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
-            // 设置合适的尺寸以确保预览清晰可见
             canvas.height = viewport.height;
             canvas.width = viewport.width;
-            canvas.style.maxWidth = '100%';
-            canvas.style.height = 'auto';
             
             const renderContext = {
                 canvasContext: context,
@@ -194,30 +161,7 @@ export class PDFProcessor {
             return canvas;
         } catch (error) {
             console.error(`Error rendering page ${pageNum}:`, error);
-            // 创建一个fallback canvas，这样至少用户能看到页面轮廓
-            const fallbackCanvas = document.createElement('canvas');
-            fallbackCanvas.width = 120;
-            fallbackCanvas.height = 150;
-            fallbackCanvas.style.width = '100%';
-            fallbackCanvas.style.height = 'auto';
-            const ctx = fallbackCanvas.getContext('2d');
-            
-            // 绘制一个简单的页面轮廓
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 120, 150);
-            ctx.strokeStyle = '#cccccc';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(1, 1, 118, 148);
-            
-            // 绘制页面号
-            ctx.fillStyle = '#666666';
-            ctx.font = '14px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(`Page ${pageNum}`, 60, 75);
-            ctx.font = '10px Arial';
-            ctx.fillText('(Preview unavailable)', 60, 90);
-            
-            return fallbackCanvas;
+            throw new Error(`Failed to render page ${pageNum}`);
         }
     }
 
@@ -237,8 +181,6 @@ export class PDFProcessor {
                 return this.splitByRanges(pdf, options, originalFilename);
             case 'extract':
                 return this.extractPages(pdf, options, originalFilename);
-            case 'parity':
-                return this.splitByParity(pdf, options, originalFilename);
             default:
                 throw new Error('Unsupported split mode');
         }
@@ -276,102 +218,6 @@ export class PDFProcessor {
             });
         }
         
-        return results;
-    }
-
-    /**
-     * Split PDF by page parity (odd/even)
-     * @param {Object} pdf - PDF document
-     * @param {Object} options - Split options
-     * @param {string} originalFilename - Original filename
-     * @returns {Promise<Array>} Split results
-     */
-    async splitByParity(pdf, options, originalFilename) {
-        const { includeOddPages, includeEvenPages } = options;
-        const totalPages = pdf.getPageCount();
-        const results = [];
-        
-        console.log('Processing PDF split by parity:', { includeOddPages, includeEvenPages, totalPages });
-        
-        // Process odd pages if selected
-        if (includeOddPages) {
-            const oddPages = [];
-            for (let i = 1; i <= totalPages; i++) {
-                if (i % 2 === 1) {
-                    oddPages.push(i);
-                }
-            }
-            
-            console.log('Odd pages to extract:', oddPages);
-            
-            if (oddPages.length > 0) {
-                try {
-                    const pageIndices = oddPages.map(p => p - 1); // Convert to 0-based
-                    const newPDF = await PDFLib.PDFDocument.create();
-                    const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
-                    
-                    copiedPages.forEach(page => newPDF.addPage(page));
-                    
-                    const pdfBytes = await newPDF.save();
-                    const suffix = 'odd_pages';
-                    const filename = this.generateFilename(originalFilename, suffix);
-                    const url = this.createDownloadUrl(pdfBytes);
-                    const pageInfo = `Odd Pages (${oddPages.length} pages)`;
-                    
-                    results.push({
-                        filename,
-                        url,
-                        size: pdfBytes.length,
-                        pageInfo
-                    });
-                    
-                    console.log('Added odd pages result:', filename);
-                } catch (error) {
-                    console.error('Error processing odd pages:', error);
-                }
-            }
-        }
-        
-        // Process even pages if selected
-        if (includeEvenPages) {
-            const evenPages = [];
-            for (let i = 1; i <= totalPages; i++) {
-                if (i % 2 === 0) {
-                    evenPages.push(i);
-                }
-            }
-            
-            console.log('Even pages to extract:', evenPages);
-            
-            if (evenPages.length > 0) {
-                try {
-                    const pageIndices = evenPages.map(p => p - 1); // Convert to 0-based
-                    const newPDF = await PDFLib.PDFDocument.create();
-                    const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
-                    
-                    copiedPages.forEach(page => newPDF.addPage(page));
-                    
-                    const pdfBytes = await newPDF.save();
-                    const suffix = 'even_pages';
-                    const filename = this.generateFilename(originalFilename, suffix);
-                    const url = this.createDownloadUrl(pdfBytes);
-                    const pageInfo = `Even Pages (${evenPages.length} pages)`;
-                    
-                    results.push({
-                        filename,
-                        url,
-                        size: pdfBytes.length,
-                        pageInfo
-                    });
-                    
-                    console.log('Added even pages result:', filename);
-                } catch (error) {
-                    console.error('Error processing even pages:', error);
-                }
-            }
-        }
-        
-        console.log('Final split results count:', results.length);
         return results;
     }
 

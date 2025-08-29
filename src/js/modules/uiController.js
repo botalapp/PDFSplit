@@ -80,7 +80,7 @@ export class UIController {
      * Show loading overlay
      * @param {string} message - Loading message
      */
-    showLoadingOverlay(message = '处理中...') {
+    showLoadingOverlay(message = 'Processing...') {
         if (this.elements.loadingOverlay) {
             const textElement = this.elements.loadingOverlay.querySelector('p');
             if (textElement) {
