@@ -214,9 +214,86 @@ export class PDFProcessorSimple {
                 return this.splitByRanges(pdf, options, originalFilename);
             case 'extract':
                 return this.extractPages(pdf, options, originalFilename);
+            case 'parity':
+                return this.splitByParity(pdf, options, originalFilename);
             default:
                 throw new Error('不支持的分割模式');
         }
+    }
+
+    /**
+     * Split PDF by page parity (odd/even)
+     */
+    async splitByParity(pdf, options, originalFilename) {
+        const { includeOddPages, includeEvenPages } = options;
+        const totalPages = pdf.getPageCount();
+        const results = [];
+        
+        console.log(`Splitting PDF by parity: odd=${includeOddPages}, even=${includeEvenPages}`);
+        
+        // Process odd pages if selected
+        if (includeOddPages) {
+            const oddPages = [];
+            for (let i = 1; i <= totalPages; i++) {
+                if (i % 2 === 1) {
+                    oddPages.push(i);
+                }
+            }
+            
+            if (oddPages.length > 0) {
+                const pageIndices = oddPages.map(p => p - 1); // Convert to 0-based
+                const newPDF = await PDFLib.PDFDocument.create();
+                const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
+                
+                copiedPages.forEach(page => newPDF.addPage(page));
+                
+                const pdfBytes = await newPDF.save();
+                const suffix = 'odd_pages';
+                const filename = this.generateFilename(originalFilename, suffix);
+                const url = this.createDownloadUrl(pdfBytes);
+                const pageInfo = `Odd Pages (${oddPages.length} pages)`;
+                
+                results.push({
+                    filename,
+                    url,
+                    size: pdfBytes.length,
+                    pageInfo
+                });
+            }
+        }
+        
+        // Process even pages if selected
+        if (includeEvenPages) {
+            const evenPages = [];
+            for (let i = 1; i <= totalPages; i++) {
+                if (i % 2 === 0) {
+                    evenPages.push(i);
+                }
+            }
+            
+            if (evenPages.length > 0) {
+                const pageIndices = evenPages.map(p => p - 1); // Convert to 0-based
+                const newPDF = await PDFLib.PDFDocument.create();
+                const copiedPages = await newPDF.copyPages(pdf.pdfLib, pageIndices);
+                
+                copiedPages.forEach(page => newPDF.addPage(page));
+                
+                const pdfBytes = await newPDF.save();
+                const suffix = 'even_pages';
+                const filename = this.generateFilename(originalFilename, suffix);
+                const url = this.createDownloadUrl(pdfBytes);
+                const pageInfo = `Even Pages (${evenPages.length} pages)`;
+                
+                results.push({
+                    filename,
+                    url,
+                    size: pdfBytes.length,
+                    pageInfo
+                });
+            }
+        }
+        
+        return results;
     }
 
     /**

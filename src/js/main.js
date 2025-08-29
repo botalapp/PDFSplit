@@ -318,6 +318,9 @@ class PDFSplitApp {
             case 'extract':
                 document.getElementById('extractPagesDetails').style.display = 'block';
                 break;
+            case 'parity':
+                document.getElementById('splitByParityDetails').style.display = 'block';
+                break;
         }
     }
 
@@ -387,6 +390,17 @@ class PDFSplitApp {
                     return null;
                 }
                 return { pages: this.parsePageNumbers(specificPages) };
+                
+            case 'parity':
+                const includeOddPages = document.getElementById('includeOddPages').checked;
+                const includeEvenPages = document.getElementById('includeEvenPages').checked;
+                
+                if (!includeOddPages && !includeEvenPages) {
+                    this.uiController.showError('Please select at least one page type (odd or even)');
+                    return null;
+                }
+                
+                return { includeOddPages, includeEvenPages };
                 
             default:
                 return null;
