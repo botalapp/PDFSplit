@@ -1,8 +1,8 @@
 [build]
-  # Build command (optional, since this is a static site)
+  # Build command
   command = "npm run build"
   # Directory to publish
-  publish = "."
+  publish = "dist"
 
 [build.environment]
   # Node.js version for build

@@ -1,6 +1,24 @@
+# PDFSplit Robots.txt
+# Allows all search engines to crawl the site
 User-agent: *
-Disallow:
+Allow: /
 
-# Allow all search engines to crawl all content
+# Disallow specific crawlers if needed
+# User-agent: BadBot
+# Disallow: /
+
 # Sitemap location
 Sitemap: https://pdfsplit.example.com/sitemap.xml
+
+# Host directive
+Host: https://pdfsplit.example.com
+
+# Crawl-delay (if needed)
+# Crawl-delay: 10
+
+# Allow all files in specific directories
+Allow: /src/assets/
+
+# Disallow temporary or sensitive directories
+Disallow: /src/js/modules/
+Disallow: /debug.html
