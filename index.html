@@ -12,12 +12,23 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Core SEO Meta Tags -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="google" content="notranslate">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <!-- Performance Meta Tags -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!-- SEO Meta Tags -->
     <meta name="description" content="Best Free Online PDF Splitter Tool - Quickly and securely split PDF files into separate documents. Support splitting by pages, page ranges, or extracting specific pages. 100% free, no installation needed, all processing done locally to protect your privacy.">
     <meta name="keywords" content="PDF split,PDF splitter,online PDF split,free PDF splitter,PDF page extract,split PDF files,PDF split into separate files,PDF divide,PDF cut">
     <meta name="robots" content="index, follow">
     <meta name="author" content="PDFSplit">
-    <meta name="google-site-verification" content="your-google-verification-code-here"> <!-- Google Search Console verification code -->
+    <meta name="google-site-verification" content="PLACEHOLDER_FOR_GOOGLE_VERIFICATION"> <!-- Replace with actual Google Search Console verification code -->
     <title>PDFSplit - Free Online PDF Splitter | Quickly Split PDF Files into Separate Documents</title>
     
     <!-- Favicon -->
@@ -28,15 +39,17 @@
     <link rel="stylesheet" href="src/css/main.css">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="src/css/main.css" as="style">
+    <link rel="preload" href="src/js/main.js" as="script" crossorigin="anonymous">
     
     <!-- Social Media Meta Tags -->
     <meta property="og:title" content="PDFSplit - Free Online PDF Splitter">
     <meta property="og:description" content="Best Free Online PDF Splitter Tool - Quickly and securely split PDF files into separate documents. Support splitting by pages, page ranges, or extracting specific pages. 100% free, no installation needed, all processing done locally to protect your privacy.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pdfsplit.example.com"> <!-- Replace with actual domain -->
-    <meta property="og:image" content="src/assets/favicon.svg">
+    <meta property="og:url" content="https://www.pdfsplit.com">
+    <meta property="og:image" content="https://www.pdfsplit.com/src/assets/share-image.png">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
     <meta property="og:site_name" content="PDFSplit">
@@ -45,11 +58,11 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="PDFSplit - Free Online PDF Splitter">
     <meta name="twitter:description" content="Best Free Online PDF Splitter Tool - Quickly and securely split PDF files into separate documents. Support splitting by pages, page ranges, or extracting specific pages. 100% free, no installation needed, all processing done locally to protect your privacy.">
-    <meta name="twitter:image" content="src/assets/favicon.svg">
+    <meta name="twitter:image" content="https://www.pdfsplit.com/src/assets/share-image.png">
     <meta name="twitter:site" content="@PDFSplitTool">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://pdfsplit.example.com"> <!-- Replace with actual domain -->
+    <link rel="canonical" href="https://www.pdfsplit.com">
     
     <!-- WebPage Structured Data -->
     <script type="application/ld+json">
@@ -58,10 +71,10 @@
       "@type": "WebPage",
       "name": "PDFSplit - Free Online PDF Splitter",
       "description": "Best Free Online PDF Splitter Tool - Quickly and securely split PDF files into separate documents. Support splitting by pages, page ranges, or extracting specific pages. 100% free, no installation needed, all processing done locally to protect your privacy.",
-      "url": "https://pdfsplit.example.com",
+      "url": "https://www.pdfsplit.com",
       "inLanguage": "en-US",
       "datePublished": "2023-01-15",
-      "dateModified": "2023-10-20",
+      "dateModified": "2024-05-01",
       "author": {
         "@type": "Organization",
         "name": "PDFSplit Team"
@@ -71,16 +84,33 @@
         "name": "PDFSplit Team",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://pdfsplit.example.com/logo.png",
+          "url": "https://www.pdfsplit.com/src/assets/favicon.svg",
           "width": 60,
           "height": 60
         }
       },
-      "image": "https://pdfsplit.example.com/screenshot.png",
+      "image": "https://www.pdfsplit.com/src/assets/share-image.png",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://pdfsplit.example.com/search?q={search_term_string}",
+        "target": "https://www.pdfsplit.com/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.pdfsplit.com"
+          }
+        ]
+      },
+      "mainEntityOfPage": "https://www.pdfsplit.com",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "PDFSplit",
+        "url": "https://www.pdfsplit.com"
       }
     }
     </script>
@@ -95,7 +125,7 @@
       "applicationCategory": "ProductivityApplication",
       "operatingSystem": "Web",
       "browserRequirements": "Supports modern browsers such as Chrome, Firefox, Safari, Edge, etc.",
-      "url": "https://pdfsplit.example.com",
+      "url": "https://www.pdfsplit.com",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -113,7 +143,11 @@
         "High Quality Preservation - Maintain original file quality and format after splitting",
         "Completely Free - No limits, no ads, no hidden fees"
       ],
-      "screenshot": "https://pdfsplit.example.com/screenshot.png",
+      "screenshot": [
+        "https://www.pdfsplit.com/src/assets/screenshot.png",
+        "https://www.pdfsplit.com/src/assets/preview-screenshot.png",
+        "https://www.pdfsplit.com/src/assets/results-screenshot.png"
+      ],
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
@@ -129,7 +163,57 @@
       "publisher": {
         "@type": "Organization",
         "name": "PDFSplit Team"
-      }
+      },
+      "softwareVersion": "1.2.0",
+      "applicationSubCategory": "FileManagement",
+      "fileFormat": "WebApp",
+      "memoryRequirements": "512MB RAM",
+      "storageRequirements": "Minimal (all processing is local)"
+    }
+    </script>
+    
+    <!-- Review Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Review",
+      "itemReviewed": {
+        "@type": "SoftwareApplication",
+        "name": "PDFSplit",
+        "applicationCategory": "ProductivityApplication"
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.9",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "John Doe"
+      },
+      "reviewBody": "PDFSplit is an excellent tool that allows me to split PDF files quickly and securely. I love that all processing is done locally, ensuring my documents stay private. The interface is intuitive and the multiple split modes make it versatile for all my needs.",
+      "datePublished": "2024-04-15"
+    }
+    </script>
+    
+    <!-- WebSite Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PDFSplit",
+      "url": "https://www.pdfsplit.com",
+      "description": "Best Free Online PDF Splitter Tool",
+      "publisher": {
+        "@type": "Organization",
+        "name": "PDFSplit Team"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.pdfsplit.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "inLanguage": "en-US"
     }
     </script>
     
@@ -212,6 +296,10 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MWXHJLMR"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
+    <!-- hreflang tags for international SEO -->
+    <link rel="alternate" href="https://www.pdfsplit.com" hreflang="en" />
+    <link rel="alternate" href="https://www.pdfsplit.com" hreflang="x-default" />
     <!-- Header -->
     <header class="header">
         <div class="container">

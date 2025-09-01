@@ -1,24 +1,49 @@
 # PDFSplit Robots.txt
-# Allows all search engines to crawl the site
+# PDFSplit Robots.txt - SEO Optimized Configuration
+
+# Main directive for all search engines
 User-agent: *
 Allow: /
 
-# Disallow specific crawlers if needed
-# User-agent: BadBot
-# Disallow: /
+# Explicit allow directives for important pages
+Allow: /guide.html
+Allow: /privacy.html
+Allow: /terms.html
+Allow: /sitemap.html
+Allow: /404.html
+Allow: /blog/
+Allow: /blog/pdf-splitting-tips.html
 
-# Sitemap location
-Sitemap: https://pdfsplit.example.com/sitemap.xml
-
-# Host directive
-Host: https://pdfsplit.example.com
-
-# Crawl-delay (if needed)
-# Crawl-delay: 10
-
-# Allow all files in specific directories
+# Allow access to public assets
 Allow: /src/assets/
 
-# Disallow temporary or sensitive directories
+# Disallow temporary, sensitive, or duplicate content directories
 Disallow: /src/js/modules/
 Disallow: /debug.html
+Disallow: /deploy.sh
+Disallow: /deploy-manual.sh
+Disallow: /CLAUDE.md
+
+# Disallow version control and configuration files
+Disallow: /.gitignore
+Disallow: /.eslintrc.json
+Disallow: /.prettierrc
+Disallow: /netlify.toml
+
+# Crawler-specific directives
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Sitemap location - critical for SEO
+Sitemap: https://www.pdfsplit.com/sitemap.xml
+
+# Host directive to specify preferred domain
+Host: https://www.pdfsplit.com
+
+# Note: PDFSplit is a free online PDF splitting tool. This file guides search engines to crawl and index our content effectively.

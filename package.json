@@ -8,7 +8,7 @@
     "build": "npm run clean && npm run create-dist && npm run copy-static && npm run build:css && npm run build:js",
     "clean": "rm -rf dist",
     "create-dist": "mkdir -p dist/src/assets",
-    "copy-static": "cp index.html guide.html privacy.html terms.html robots.txt sitemap.xml _redirects *.md src/assets/* dist/",
+    "copy-static": "cp index.html guide.html privacy.html terms.html robots.txt sitemap.xml sitemap.html 404.html .htaccess _redirects *.md src/assets/* dist/ && cp -r blog dist/",
     "build:css": "npx postcss src/css/main.css -o dist/src/css/main.css --use autoprefixer --use cssnano",
     "build:js": "npx esbuild src/js/main.js --bundle --outfile=dist/src/js/main.js --minify --target=es2020",
     "preview": "npx live-server dist --port=3001",

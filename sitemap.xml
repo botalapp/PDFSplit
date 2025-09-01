@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <!-- Main page -->
     <url>
-        <loc>https://pdfsplit.example.com/</loc>
+        <loc>https://www.pdfsplit.com/</loc>
         <lastmod>2024-05-01</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
@@ -10,7 +10,7 @@
     
     <!-- FAQ Section -->
     <url>
-        <loc>https://pdfsplit.example.com/#faq</loc>
+        <loc>https://www.pdfsplit.com/#faq</loc>
         <lastmod>2024-05-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -18,7 +18,7 @@
     
     <!-- Features Section -->
     <url>
-        <loc>https://pdfsplit.example.com/#features</loc>
+        <loc>https://www.pdfsplit.com/#features</loc>
         <lastmod>2024-05-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -26,7 +26,7 @@
     
     <!-- Guide Page -->
     <url>
-        <loc>https://pdfsplit.example.com/guide</loc>
+        <loc>https://www.pdfsplit.com/guide.html</loc>
         <lastmod>2024-05-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
@@ -34,7 +34,7 @@
     
     <!-- Privacy Policy Page -->
     <url>
-        <loc>https://pdfsplit.example.com/privacy</loc>
+        <loc>https://www.pdfsplit.com/privacy.html</loc>
         <lastmod>2024-05-01</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.7</priority>
@@ -42,9 +42,32 @@
     
     <!-- Terms of Service Page -->
     <url>
-        <loc>https://pdfsplit.example.com/terms</loc>
+        <loc>https://www.pdfsplit.com/terms.html</loc>
         <lastmod>2024-05-01</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.7</priority>
+    </url>
+    
+    <!-- HTML Sitemap Page -->
+    <url>
+    <loc>https://www.pdfsplit.com/sitemap.html</loc>
+    <lastmod>2024-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <!-- Blog Posts -->
+    <url>
+        <loc>https://www.pdfsplit.com/blog/pdf-splitting-tips.html</loc>
+        <lastmod>2024-05-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Error Pages -->
+    <url>
+        <loc>https://www.pdfsplit.com/404.html</loc>
+        <lastmod>2024-05-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.1</priority>
     </url>
 </urlset>

@@ -9,9 +9,13 @@ import { PDFProcessor } from './modules/pdfProcessor.js';
 import { PDFProcessorSimple } from './modules/pdfProcessorSimple.js';
 import { UIController } from './modules/uiController.js';
 import { DownloadManager } from './modules/downloadManager.js';
+import { PerformanceOptimizer } from './modules/performance.js';
 
 class PDFSplitApp {
     constructor() {
+        // Initialize performance optimizer first for early optimizations
+        this.performanceOptimizer = new PerformanceOptimizer();
+        
         this.fileHandler = new FileHandler();
         
         // 根据PDF.js加载状态选择合适的处理器
@@ -352,6 +356,9 @@ class PDFSplitApp {
             this.uiController.hideLoadingOverlay();
             this.uiController.showResultsSection();
             
+            // Log successful split as conversion event for SEO
+            this.performanceOptimizer.logConversionEvent('pdf_split_completed');
+            
         } catch (error) {
             console.error('Split error:', error);
             this.uiController.hideLoadingOverlay();
@@ -487,6 +494,9 @@ class PDFSplitApp {
             // Add small delay to prevent browser from blocking downloads
             await new Promise(resolve => setTimeout(resolve, 100));
         }
+        
+        // Log download event for SEO and analytics
+        this.performanceOptimizer.logConversionEvent('pdf_download_all');
     }
 
     /**
@@ -521,6 +531,11 @@ class PDFSplitApp {
                 URL.revokeObjectURL(result.url);
             }
         });
+        
+        // Clean up performance resources if needed
+        if (this.performanceOptimizer && typeof this.performanceOptimizer.cleanup === 'function') {
+            this.performanceOptimizer.cleanup();
+        }
     }
 }
 
