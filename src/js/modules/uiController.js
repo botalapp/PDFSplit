@@ -80,7 +80,7 @@ export class UIController {
      * Show loading overlay
      * @param {string} message - Loading message
      */
-    showLoadingOverlay(message = '处理中...') {
+    showLoadingOverlay(message = 'Processing...') {
         if (this.elements.loadingOverlay) {
             const textElement = this.elements.loadingOverlay.querySelector('p');
             if (textElement) {
@@ -181,9 +181,9 @@ export class UIController {
         if (fileInfo) {
             const fileSizeText = this.formatFileSize(fileSize);
             fileInfo.innerHTML = `
-                <strong>文件名:</strong> ${filename}<br>
-                <strong>页数:</strong> ${pageCount} 页<br>
-                <strong>大小:</strong> ${fileSizeText}
+                <strong>Filename:</strong> ${filename}<br>
+                <strong>Pages:</strong> ${pageCount} pages<br>
+                <strong>Size:</strong> ${fileSizeText}
             `;
         }
     }
@@ -243,7 +243,7 @@ export class UIController {
      * @param {HTMLElement} button - Button element
      * @param {string} loadingText - Loading text
      */
-    setButtonLoading(button, loadingText = '处理中...') {
+    setButtonLoading(button, loadingText = 'Processing...') {
         if (button) {
             button.disabled = true;
             button.dataset.originalText = button.textContent;
@@ -317,7 +317,7 @@ export class UIController {
                 if (!pagesPerFile || !pagesPerFile.value || parseInt(pagesPerFile.value) < 1) {
                     return {
                         isValid: false,
-                        error: '请输入有效的每个文件页数'
+                        error: 'Please enter a valid number of pages per file'
                     };
                 }
                 break;
@@ -327,7 +327,7 @@ export class UIController {
                 if (!pageRanges || !pageRanges.value.trim()) {
                     return {
                         isValid: false,
-                        error: '请输入页面范围'
+                        error: 'Please enter page ranges'
                     };
                 }
                 break;
@@ -337,7 +337,7 @@ export class UIController {
                 if (!specificPages || !specificPages.value.trim()) {
                     return {
                         isValid: false,
-                        error: '请选择要提取的页面'
+                        error: 'Please select pages to extract'
                     };
                 }
                 break;

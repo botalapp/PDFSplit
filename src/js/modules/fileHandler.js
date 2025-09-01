@@ -106,12 +106,12 @@ export class FileHandler {
      * @returns {boolean} Whether file has valid PDF header
      */
     validatePDFHeader(buffer) {
-        // 基础检查
+        // Basic check
         if (!buffer || buffer.byteLength < 5) {
             return false;
         }
         
-        // 检查PDF文件头
+        // Check PDF file header
         const uint8Array = new Uint8Array(buffer, 0, 5);
         const header = Array.from(uint8Array)
             .map(byte => String.fromCharCode(byte))

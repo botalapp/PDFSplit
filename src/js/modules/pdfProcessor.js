@@ -161,7 +161,7 @@ export class PDFProcessor {
             return canvas;
         } catch (error) {
             console.error(`Error rendering page ${pageNum}:`, error);
-            throw new Error(`无法渲染第 ${pageNum} 页`);
+            throw new Error(`Failed to render page ${pageNum}`);
         }
     }
 
@@ -182,7 +182,7 @@ export class PDFProcessor {
             case 'extract':
                 return this.extractPages(pdf, options, originalFilename);
             default:
-                throw new Error('不支持的分割模式');
+                throw new Error('Unsupported split mode');
         }
     }
 
@@ -208,7 +208,7 @@ export class PDFProcessor {
             const suffix = `pages_${startPage + 1}-${endPage + 1}`;
             const filename = this.generateFilename(originalFilename, suffix);
             const url = this.createDownloadUrl(pdfBytes);
-            const pageInfo = `第 ${startPage + 1}-${endPage + 1} 页`;
+            const pageInfo = `Pages ${startPage + 1}-${endPage + 1}`;
             
             results.push({
                 filename,
@@ -249,7 +249,7 @@ export class PDFProcessor {
             const suffix = `range_${range.start}-${range.end}`;
             const filename = this.generateFilename(originalFilename, suffix);
             const url = this.createDownloadUrl(pdfBytes);
-            const pageInfo = `第 ${range.start}-${range.end} 页`;
+            const pageInfo = `Pages ${range.start}-${range.end}`;
             
             results.push({
                 filename,
@@ -275,7 +275,7 @@ export class PDFProcessor {
         const validPages = pages.filter(p => p >= 1 && p <= totalPages);
         
         if (validPages.length === 0) {
-            throw new Error('没有有效的页面可以提取');
+            throw new Error('No valid pages to extract');
         }
         
         // Convert to 0-based indices
@@ -290,7 +290,7 @@ export class PDFProcessor {
         const suffix = `extracted_pages_${validPages.join('-')}`;
         const filename = this.generateFilename(originalFilename, suffix);
         const url = this.createDownloadUrl(pdfBytes);
-        const pageInfo = `第 ${validPages.join(', ')} 页`;
+        const pageInfo = `Pages ${validPages.join(', ')}`;
         
         return [{
             filename,

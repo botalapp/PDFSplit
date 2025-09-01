@@ -88,12 +88,12 @@ export class PDFProcessorSimple {
                 color: #666;
                 text-align: center;
             `;
-            pageDiv.innerHTML = `第 ${pageNum} 页`;
+            pageDiv.innerHTML = `Page ${pageNum}`;
             
             return pageDiv;
         } catch (error) {
             console.error(`Error creating page ${pageNum}:`, error);
-            throw new Error(`无法创建第 ${pageNum} 页预览`);
+            throw new Error(`Failed to create preview for page ${pageNum}`);
         }
     }
 
@@ -119,7 +119,7 @@ export class PDFProcessorSimple {
             const suffix = `pages_${startPage + 1}-${endPage + 1}`;
             const filename = this.generateFilename(originalFilename, suffix);
             const url = this.createDownloadUrl(pdfBytes);
-            const pageInfo = `第 ${startPage + 1}-${endPage + 1} 页`;
+            const pageInfo = `Pages ${startPage + 1}-${endPage + 1}`;
             
             results.push({
                 filename,
@@ -156,7 +156,7 @@ export class PDFProcessorSimple {
             const suffix = `range_${range.start}-${range.end}`;
             const filename = this.generateFilename(originalFilename, suffix);
             const url = this.createDownloadUrl(pdfBytes);
-            const pageInfo = `第 ${range.start}-${range.end} 页`;
+            const pageInfo = `Pages ${range.start}-${range.end}`;
             
             results.push({
                 filename,
@@ -178,7 +178,7 @@ export class PDFProcessorSimple {
         const validPages = pages.filter(p => p >= 1 && p <= totalPages);
         
         if (validPages.length === 0) {
-            throw new Error('没有有效的页面可以提取');
+            throw new Error('No valid pages to extract');
         }
         
         const pageIndices = validPages.map(p => p - 1);
@@ -191,7 +191,7 @@ export class PDFProcessorSimple {
         const suffix = `extracted_pages_${validPages.join('-')}`;
         const filename = this.generateFilename(originalFilename, suffix);
         const url = this.createDownloadUrl(pdfBytes);
-        const pageInfo = `第 ${validPages.join(', ')} 页`;
+        const pageInfo = `Pages ${validPages.join(', ')}`;
         
         return [{
             filename,
@@ -215,7 +215,7 @@ export class PDFProcessorSimple {
             case 'extract':
                 return this.extractPages(pdf, options, originalFilename);
             default:
-                throw new Error('不支持的分割模式');
+                throw new Error('Unsupported split mode');
         }
     }
 

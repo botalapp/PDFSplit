@@ -104,7 +104,7 @@ export class DownloadManager {
      */
     async downloadAll(results, progressCallback = null) {
         if (!results || results.length === 0) {
-            throw new Error('没有文件可以下载');
+            throw new Error('No files available to download');
         }
 
         // Clear existing queue

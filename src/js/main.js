@@ -452,7 +452,7 @@ class PDFSplitApp {
                         <p>${result.pageInfo} | ${this.formatFileSize(result.size)}</p>
                     </div>
                 </div>
-                <a href="${result.url}" download="${result.filename}" class="download-btn">下载</a>
+                <a href="${result.url}" download="${result.filename}" class="download-btn">Download</a>
             `;
             
             downloadList.appendChild(item);
