@@ -12,6 +12,7 @@ Allow: /terms.html
 Allow: /sitemap.html
 Allow: /404.html
 Allow: /blog/
+Allow: /blog/split-pdf-by-file-size.html
 Allow: /blog/pdf-splitting-tips.html
 
 # Allow access to public assets
