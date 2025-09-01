@@ -116,6 +116,19 @@ body {
     color: var(--gray-900);
 }
 
+/* Header link styles */
+.header-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform var(--transition);
+    width: fit-content;
+}
+
+.header-link:hover {
+    transform: scale(1.01);
+}
+
 .tagline {
     color: var(--gray-600);
     font-size: var(--font-size-sm);
@@ -143,6 +156,21 @@ body {
     transition: all var(--transition);
     position: relative;
     overflow: hidden;
+}
+
+.upload-button-container {
+    margin: 0 auto 1.5rem;
+}
+
+.btn-upload {
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  padding: 0.875rem 2rem;
+}
+
+.btn-icon {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .upload-area:hover,

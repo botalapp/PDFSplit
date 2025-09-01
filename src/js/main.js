@@ -41,6 +41,7 @@ class PDFSplitApp {
         
         this.currentPDF = null;
         this.currentFileName = '';
+        this.currentFileSize = 0;
         this.splitResults = [];
         
         this.init();
@@ -70,6 +71,12 @@ class PDFSplitApp {
 
         // Upload area click
         document.getElementById('uploadArea').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        // Upload button click
+        document.querySelector('.btn-upload').addEventListener('click', (e) => {
+            e.stopPropagation(); // 防止触发uploadArea的点击事件
             document.getElementById('fileInput').click();
         });
 
@@ -130,9 +137,12 @@ class PDFSplitApp {
                 });
                 
                 // Show selected mode details
-                const selectedDetails = document.getElementById(mode.value === 'pages' ? 'splitByPagesDetails' : 
-                                                              mode.value === 'range' ? 'splitByRangeDetails' : 
-                                                              'extractPagesDetails');
+                const selectedDetails = document.getElementById(
+                    mode.value === 'pages' ? 'splitByPagesDetails' : 
+                    mode.value === 'range' ? 'splitByRangeDetails' : 
+                    mode.value === 'extract' ? 'extractPagesDetails' : 
+                    'splitBySizeDetails'
+                );
                 if (selectedDetails) {
                     selectedDetails.style.display = 'block';
                 }
@@ -161,6 +171,7 @@ class PDFSplitApp {
             }
 
             this.currentFileName = file.name;
+            this.currentFileSize = file.size; // Store file size
             this.uiController.showProgress(0, 'Reading PDF file...');
             
             // Read file
@@ -284,7 +295,24 @@ class PDFSplitApp {
     updateFileInfo() {
         const fileInfo = document.getElementById('fileInfo');
         const pageCount = this.currentPDF.getPageCount();
-        fileInfo.textContent = `文件名: ${this.currentFileName} | 总页数: ${pageCount} 页`;
+        
+        // Format file size to human-readable format
+        let fileSizeStr = '';
+        if (this.currentFileSize > 0) {
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let size = this.currentFileSize;
+            let unitIndex = 0;
+            
+            while (size >= 1024 && unitIndex < units.length - 1) {
+                size /= 1024;
+                unitIndex++;
+            }
+            
+            fileSizeStr = ` | Size: ${size.toFixed(2)} ${units[unitIndex]}`;
+        }
+        
+        // Use English for all file info display
+        fileInfo.textContent = `File name: ${this.currentFileName} | Total pages: ${pageCount} |${fileSizeStr}`;
     }
 
     /**
@@ -321,6 +349,9 @@ class PDFSplitApp {
                 break;
             case 'extract':
                 document.getElementById('extractPagesDetails').style.display = 'block';
+                break;
+            case 'size':
+                document.getElementById('splitBySizeDetails').style.display = 'block';
                 break;
         }
     }
@@ -374,7 +405,7 @@ class PDFSplitApp {
             case 'pages':
                 const pagesPerFile = parseInt(document.getElementById('pagesPerFile').value);
                 if (!pagesPerFile || pagesPerFile < 1) {
-                    this.uiController.showError('请输入有效的页数');
+                    this.uiController.showError('Please enter a valid number of pages');
                     return null;
                 }
                 return { pagesPerFile };
@@ -382,7 +413,7 @@ class PDFSplitApp {
             case 'range':
                 const pageRanges = document.getElementById('pageRanges').value;
                 if (!pageRanges.trim()) {
-                    this.uiController.showError('请输入页面范围');
+                    this.uiController.showError('Please enter page ranges');
                     return null;
                 }
                 return { ranges: this.parsePageRanges(pageRanges) };
@@ -390,10 +421,29 @@ class PDFSplitApp {
             case 'extract':
                 const specificPages = document.getElementById('specificPages').value;
                 if (!specificPages.trim()) {
-                    this.uiController.showError('请选择要提取的页面');
+                    this.uiController.showError('Please select pages to extract');
                     return null;
                 }
                 return { pages: this.parsePageNumbers(specificPages) };
+                
+            case 'size':
+                const maxFileSize = parseInt(document.getElementById('maxFileSize').value);
+                const sizeUnit = document.getElementById('sizeUnit').value;
+                
+                if (!maxFileSize || maxFileSize <= 0) {
+                    this.uiController.showError('Please enter a valid file size');
+                    return null;
+                }
+                
+                // Convert to bytes for processing
+                let maxSizeBytes;
+                if (sizeUnit === 'MB') {
+                    maxSizeBytes = maxFileSize * 1024 * 1024;
+                } else {
+                    maxSizeBytes = maxFileSize * 1024;
+                }
+                
+                return { maxSizeBytes };
                 
             default:
                 return null;
@@ -506,6 +556,7 @@ class PDFSplitApp {
         // Clear data
         this.currentPDF = null;
         this.currentFileName = '';
+        this.currentFileSize = 0;
         this.splitResults = [];
         
         // Reset form
@@ -513,6 +564,8 @@ class PDFSplitApp {
         document.getElementById('pagesPerFile').value = '1';
         document.getElementById('pageRanges').value = '';
         document.getElementById('specificPages').value = '';
+        document.getElementById('maxFileSize').value = '5';
+        document.getElementById('sizeUnit').value = 'MB';
         document.querySelector('input[name="splitMode"][value="pages"]').checked = true;
         
         // Reset UI

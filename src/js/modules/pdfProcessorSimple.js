@@ -214,9 +214,87 @@ export class PDFProcessorSimple {
                 return this.splitByRanges(pdf, options, originalFilename);
             case 'extract':
                 return this.extractPages(pdf, options, originalFilename);
+            case 'size':
+                return this.splitBySize(pdf, options, originalFilename);
             default:
                 throw new Error('Unsupported split mode');
         }
+    }
+
+    /**
+     * Split PDF by file size
+     */
+    async splitBySize(pdf, options, originalFilename) {
+        const { maxSizeBytes } = options;
+        const totalPages = pdf.getPageCount();
+        const results = [];
+        
+        console.log(`Splitting PDF by maximum file size: ${maxSizeBytes} bytes`);
+        
+        // First pass to estimate page sizes
+        const pageSizeEstimates = [];
+        for (let i = 0; i < totalPages; i++) {
+            // Create a PDF with just this page to estimate its size
+            const singlePagePDF = await this.createPDFFromPages(pdf.pdfLib, i, i);
+            const singlePageBytes = await singlePagePDF.save();
+            pageSizeEstimates.push(singlePageBytes.length);
+        }
+        
+        // Second pass to create files that don't exceed maxSizeBytes
+        let currentFileStartPage = 0;
+        let currentFileSizeEstimate = 0;
+        
+        for (let i = 0; i < totalPages; i++) {
+            // Add current page's estimated size
+            currentFileSizeEstimate += pageSizeEstimates[i];
+            
+            // If adding this page exceeds the max size, split here
+            if (currentFileSizeEstimate > maxSizeBytes && i > currentFileStartPage) {
+                // Create file from currentFileStartPage to i-1
+                const newPDF = await this.createPDFFromPages(pdf.pdfLib, currentFileStartPage, i - 1);
+                const pdfBytes = await newPDF.save();
+                
+                const suffix = `size_${currentFileStartPage + 1}-${i}`;
+                const filename = this.generateFilename(originalFilename, suffix);
+                const url = this.createDownloadUrl(pdfBytes);
+                const pageInfo = `Pages ${currentFileStartPage + 1}-${i}`;
+                
+                console.log(`Created file for pages ${currentFileStartPage + 1}-${i}, size: ${pdfBytes.length} bytes`);
+                
+                results.push({
+                    filename,
+                    url,
+                    size: pdfBytes.length,
+                    pageInfo
+                });
+                
+                // Reset for next file
+                currentFileStartPage = i;
+                currentFileSizeEstimate = pageSizeEstimates[i];
+            }
+        }
+        
+        // Don't forget the last file
+        if (currentFileStartPage < totalPages) {
+            const newPDF = await this.createPDFFromPages(pdf.pdfLib, currentFileStartPage, totalPages - 1);
+            const pdfBytes = await newPDF.save();
+            
+            const suffix = `size_${currentFileStartPage + 1}-${totalPages}`;
+            const filename = this.generateFilename(originalFilename, suffix);
+            const url = this.createDownloadUrl(pdfBytes);
+            const pageInfo = `Pages ${currentFileStartPage + 1}-${totalPages}`;
+            
+            console.log(`Created final file for pages ${currentFileStartPage + 1}-${totalPages}, size: ${pdfBytes.length} bytes`);
+            
+            results.push({
+                filename,
+                url,
+                size: pdfBytes.length,
+                pageInfo
+            });
+        }
+        
+        return results;
     }
 
     /**
