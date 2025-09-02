@@ -16,7 +16,7 @@ export class PDFProcessor {
         if (typeof pdfjsLib !== 'undefined') {
             // Set worker source
             if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
             }
             console.log('PDF.js initialized with worker:', pdfjsLib.GlobalWorkerOptions.workerSrc);
         } else {

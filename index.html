@@ -40,7 +40,7 @@
     
     <!-- Preload critical resources -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" as="script" crossorigin="anonymous">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js" as="script" crossorigin="anonymous">
     <link rel="preload" href="src/css/main.css" as="style">
     <link rel="preload" href="src/js/main.js" as="script" crossorigin="anonymous">
     
@@ -601,8 +601,8 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     
-    <!-- PDF.js 加载 -->
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+    <!-- PDF.js Loading -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     
     <script>
         // 全局标志，标记PDF.js是否加载成功
@@ -612,12 +612,12 @@
         if (typeof pdfjsLib !== 'undefined') {
             try {
                 // Set up PDF.js worker and configuration
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.js';
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
                 
                 // Configure PDF.js
-                pdfjsLib.GlobalWorkerOptions.cMapUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/cmaps/';
+                pdfjsLib.GlobalWorkerOptions.cMapUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/';
                 pdfjsLib.GlobalWorkerOptions.cMapPacked = true;
-                pdfjsLib.GlobalWorkerOptions.standardFontDataUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/standard_fonts/';
+                pdfjsLib.GlobalWorkerOptions.standardFontDataUrl = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/standard_fonts/';
                 
                 window.pdfJsAvailable = true;
                 console.log('PDF.js initialized successfully');
